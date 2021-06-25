@@ -96,7 +96,7 @@ struct dc_setting_bool *dc_setting_bool_create(void)
 
 void dc_setting_bool_destroy(struct dc_setting_bool **psetting)
 {
-    memset(*psetting, 0, sizeof(struct dc_setting_path));
+    memset(*psetting, 0, sizeof(struct dc_setting_bool));
     free(*psetting);
     *psetting = NULL;
 }
