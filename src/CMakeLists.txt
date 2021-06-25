@@ -1,6 +1,3 @@
-include_directories(/usr/local/include)
-link_directories(/usr/local/lib)
-
 # Note that headers are optional, and do not affect add_library, but they will not
 # show up in IDEs unless they are listed in add_library.
 
@@ -12,6 +9,9 @@ file(GLOB SOURCE_LIST CONFIGURE_DEPENDS "${libdc_application_SOURCE_DIR}/src/*.c
 
 # Make an static library
 add_library(dc_application SHARED ${SOURCE_LIST} ${HEADER_LIST})
+target_include_directories(dc_application PRIVATE ../include/dc_application)
+target_include_directories(dc_application PRIVATE /usr/local/include)
+target_link_directories(dc_application PRIVATE /usr/local/lib)
 
 find_library(LIBDC_FSM dc_fsm REQUIRED)
 if(LIBDC_FSM)
@@ -22,9 +22,6 @@ find_library(LIBDC_UTIL dc_util REQUIRED)
 if(LIBDC_UTIL)
     target_link_libraries(dc_application ${LIBDC_UTIL})
 endif()
-
-# We need this directory, and users of our library will need it too
-target_include_directories(dc_application PUBLIC ../include/dc_application)
 
 # All users of this library will need at least C11
 target_compile_features(dc_application PUBLIC c_std_11)
