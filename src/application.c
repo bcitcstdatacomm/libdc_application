@@ -138,7 +138,7 @@ struct dc_application_info *dc_application_info_create(const char *name,
 
 void dc_application_info_destroy(struct dc_application_info **pinfo)
 {
-    memset((*pinfo)->default_config_path, '\0', strlen((*pinfo)->name));
+    memset((*pinfo)->default_config_path, '\0', strlen((*pinfo)->default_config_path));
     free((*pinfo)->default_config_path);
     memset((*pinfo)->name, '\0', strlen((*pinfo)->name));
     free((*pinfo)->name);
