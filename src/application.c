@@ -379,6 +379,7 @@ static int destroy_settings(void *arg)
 
     if(info->lifecycle->destroy_settings)
     {
+        dc_setting_path_destroy(&info->settings->config_path);
         ret_val = info->lifecycle->destroy_settings(&info->settings);
     }
 
