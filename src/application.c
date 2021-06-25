@@ -32,7 +32,7 @@ static int set_defaults(void *arg);
 static int run(void *arg);
 static int cleanup(void *arg);
 static int destroy_settings(void *arg);
-
+static int error(void *arg);
 
 struct dc_application_lifecycle
 {
@@ -161,6 +161,8 @@ int dc_application_run(struct dc_application_info *info,
                     { READ_CONFIG,        SET_DEFAULTS,       set_defaults       },
                     { SET_DEFAULTS,       RUN,                run                },
                     { RUN,                CLEANUP,            cleanup            },
+                    { RUN,                ERROR,              error              },
+                    { ERROR,              CLEANUP,            cleanup            },
                     { CLEANUP,            DESTROY_SETTINGS,   destroy_settings   },
                     { DESTROY_SETTINGS,   DC_FSM_EXIT,        NULL               },
                     { DC_FSM_IGNORE,      DC_FSM_IGNORE,      NULL               },
@@ -393,4 +395,9 @@ static int destroy_settings(void *arg)
     }
 
     return ret_val;
+}
+
+static int error(__attribute__((unused)) void *arg)
+{
+    return CLEANUP;
 }
