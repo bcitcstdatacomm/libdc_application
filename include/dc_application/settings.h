@@ -1,5 +1,5 @@
-#ifndef DC_SETTINGS_H
-#define DC_SETTINGS_H
+#ifndef LIBDC_APPLICATION_SETTINGS_H
+#define LIBDC_APPLICATION_SETTINGS_H
 
 
 /*
@@ -57,4 +57,4 @@ bool dc_setting_bool_set(struct dc_setting_bool *setting, bool value, dc_setting
 bool dc_setting_bool_get(struct dc_setting_bool *setting);
 
 
-#endif
+#endif // LIBDC_APPLICATION_SETTINGS_H

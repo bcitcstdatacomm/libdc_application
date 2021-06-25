@@ -1,5 +1,5 @@
-#ifndef DC_APPLICATION_H
-#define DC_APPLICATION_H
+#ifndef LIBDC_APPLICATION_APPLICATION_H
+#define LIBDC_APPLICATION_APPLICATION_H
 
 
 /*
@@ -46,4 +46,4 @@ int dc_application_run(struct dc_application_info *info,
                        int argc,
                        char *argv[]);
 
-#endif
+#endif // LIBDC_APPLICATION_APPLICATION_H
