@@ -16,9 +16,9 @@
 
 
 #include "settings.h"
+#include <dc_util/path.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dc_util/path.h>
 
 
 #pragma GCC diagnostic push
@@ -60,13 +60,13 @@ void dc_setting_path_destroy(struct dc_setting_path **psetting)
     *psetting = NULL;
 }
 
-bool dc_setting_path_set(struct dc_setting_path *setting, const char *value, dc_setting_type type)
+bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_setting_path *setting, const char *value, dc_setting_type type)
 {
     bool ret_val;
 
     if(setting->parent.type == DC_SETTING_NONE)
     {
-        expand_path(&setting->path, value);
+        expand_path(env, &setting->path, value);
         setting->parent.type = type;
         ret_val = true;
     }

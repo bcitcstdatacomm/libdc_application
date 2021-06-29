@@ -1,11 +1,15 @@
 # Note that headers are optional, and do not affect add_library, but they will not
 # show up in IDEs unless they are listed in add_library.
 
-# Get header files
-file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${libdc_application_SOURCE_DIR}/include/dc_application/*.h")
+set(HEADER_LIST
+        "${libdc_application_SOURCE_DIR}/include/dc_application/application.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/settings.h"
+        )
 
-# Get source files
-file(GLOB SOURCE_LIST CONFIGURE_DEPENDS "${libdc_application_SOURCE_DIR}/src/*.c")
+set(SOURCE_LIST
+        "application.c"
+        "settings.c"
+        )
 
 # Make an static library
 add_library(dc_application SHARED ${SOURCE_LIST} ${HEADER_LIST})
@@ -13,14 +17,19 @@ target_include_directories(dc_application PRIVATE ../include/dc_application)
 target_include_directories(dc_application PRIVATE /usr/local/include)
 target_link_directories(dc_application PRIVATE /usr/local/lib)
 
-find_library(LIBDC_FSM dc_fsm REQUIRED)
-if(LIBDC_FSM)
-    target_link_libraries(dc_application ${LIBDC_FSM})
+find_library(LIBDC_POSIX dc_posix REQUIRED)
+if(LIBDC_POSIX)
+    target_link_libraries(dc_application ${LIBDC_POSIX})
 endif()
 
 find_library(LIBDC_UTIL dc_util REQUIRED)
 if(LIBDC_UTIL)
     target_link_libraries(dc_application ${LIBDC_UTIL})
+endif()
+
+find_library(LIBDC_FSM dc_fsm REQUIRED)
+if(LIBDC_FSM)
+    target_link_libraries(dc_application ${LIBDC_FSM})
 endif()
 
 # All users of this library will need at least C11

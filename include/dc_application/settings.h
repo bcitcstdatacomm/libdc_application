@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <dc_posix/posix_env.h>
 
 
 // TODO: move these to the .c file and change the arguments to the functins
@@ -44,16 +45,67 @@ struct dc_setting
 struct dc_setting_path;
 struct dc_setting_bool;
 
+/**
+ *
+ * @param setting
+ * @return
+ */
 bool dc_setting_is_set(struct dc_setting *setting);
 
+/**
+ *
+ * @return
+ */
 struct dc_setting_path *dc_setting_path_create(void);
+
+/**
+ *
+ * @param psetting
+ */
 void dc_setting_path_destroy(struct dc_setting_path **psetting);
-bool dc_setting_path_set(struct dc_setting_path *setting, const char *value, dc_setting_type type);
+
+/**
+ *
+ * @param setting
+ * @param value
+ * @param type
+ * @return
+ */
+bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_setting_path *setting, const char *value, dc_setting_type type);
+
+/**
+ *
+ * @param setting
+ * @return
+ */
 const char *dc_setting_path_get(struct dc_setting_path *setting);
 
+/**
+ *
+ * @return
+ */
 struct dc_setting_bool *dc_setting_bool_create(void);
+
+/**
+ *
+ * @param psetting
+ */
 void dc_setting_bool_destroy(struct dc_setting_bool **psetting);
+
+/**
+ *
+ * @param setting
+ * @param value
+ * @param type
+ * @return
+ */
 bool dc_setting_bool_set(struct dc_setting_bool *setting, bool value, dc_setting_type type);
+
+/**
+ *
+ * @param setting
+ * @return
+ */
 bool dc_setting_bool_get(struct dc_setting_bool *setting);
 
 
