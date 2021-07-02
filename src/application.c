@@ -218,10 +218,10 @@ int dc_application_run(struct dc_application_info *info,
                     { CLEANUP,                  CLEANUP_ERROR,            cleanup_error            },
                     { DESTROY_SETTINGS,         DESTROY_SETTINGS_ERROR,   destroy_settings_error   },
                     { CREATE_SETTINGS_ERROR,    DC_FSM_EXIT,              NULL                     },
-                    { PARSE_COMMAND_LINE_ERROR, DC_FSM_EXIT,              NULL                     },
-                    { READ_ENV_VARS_ERROR,      DC_FSM_EXIT,              NULL                     },
-                    { READ_CONFIG_ERROR,        DC_FSM_EXIT,              NULL                     },
-                    { SET_DEFAULTS_ERROR,       DC_FSM_EXIT,              NULL                     },
+                    { PARSE_COMMAND_LINE_ERROR, DESTROY_SETTINGS,         destroy_settings         },
+                    { READ_ENV_VARS_ERROR,      DESTROY_SETTINGS,         destroy_settings         },
+                    { READ_CONFIG_ERROR,        DESTROY_SETTINGS,         destroy_settings         },
+                    { SET_DEFAULTS_ERROR,       DESTROY_SETTINGS,         destroy_settings         },
                     { RUN_ERROR,                DESTROY_SETTINGS,         destroy_settings         },
                     { CLEANUP_ERROR,            DESTROY_SETTINGS,         destroy_settings         },
                     { DESTROY_SETTINGS_ERROR,   DC_FSM_EXIT,              NULL                     },
@@ -474,22 +474,22 @@ static int create_settings_error(__attribute__((unused)) void *arg)
 
 static int parse_command_line_error(__attribute__((unused)) void *arg)
 {
-    return DC_FSM_EXIT;
+    return DESTROY_SETTINGS;
 }
 
 static int read_env_vars_error(__attribute__((unused)) void *arg)
 {
-    return DC_FSM_EXIT;
+    return DESTROY_SETTINGS;
 }
 
 static int read_config_error(__attribute__((unused)) void *arg)
 {
-    return DC_FSM_EXIT;
+    return DESTROY_SETTINGS;
 }
 
 static int set_defaults_error(__attribute__((unused)) void *arg)
 {
-    return DC_FSM_EXIT;
+    return DESTROY_SETTINGS;
 }
 
 static int run_error(__attribute__((unused)) void *arg)
