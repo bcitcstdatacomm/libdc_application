@@ -222,7 +222,7 @@ int dc_application_run(struct dc_application_info *info,
                     { READ_ENV_VARS_ERROR,      DC_FSM_EXIT,              NULL                     },
                     { READ_CONFIG_ERROR,        DC_FSM_EXIT,              NULL                     },
                     { SET_DEFAULTS_ERROR,       DC_FSM_EXIT,              NULL                     },
-                    { RUN_ERROR,                DC_FSM_EXIT,              NULL                     },
+                    { RUN_ERROR,                DESTROY_SETTINGS,         destroy_settings         },
                     { CLEANUP_ERROR,            DC_FSM_EXIT,              NULL                     },
                     { DESTROY_SETTINGS_ERROR,   DC_FSM_EXIT,              NULL                     },
                     { DC_FSM_IGNORE,            DC_FSM_IGNORE,            NULL                     },
@@ -494,7 +494,7 @@ static int set_defaults_error(__attribute__((unused)) void *arg)
 
 static int run_error(__attribute__((unused)) void *arg)
 {
-    return DC_FSM_EXIT;
+    return DESTROY_SETTINGS;
 }
 
 static int cleanup_error(__attribute__((unused)) void *arg)
