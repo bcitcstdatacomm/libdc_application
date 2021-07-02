@@ -98,7 +98,12 @@ struct dc_application_lifecycle *dc_application_lifecycle_create(const struct dc
     struct dc_application_lifecycle *lifecycle;
     int err;
 
-    lifecycle = dc_malloc(env, &err, sizeof(struct dc_application_lifecycle));
+    lifecycle = dc_calloc(env, &err, 1, sizeof(struct dc_application_lifecycle));
+
+    if(lifecycle == NULL)
+    {
+    }
+
     lifecycle->create_settings = create_settings_func;
     lifecycle->run = run_func;
     lifecycle->destroy_settings = destroy_settings_func;
