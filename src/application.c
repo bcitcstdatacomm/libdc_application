@@ -221,21 +221,29 @@ int dc_application_run(struct dc_application_info *info,
     int ret_val;
 
     info->lifecycle = create_lifecycle_func(info->env);
-    info->argc      = argc;
-    info->argv      = argv;
 
-    if(default_config_path)
+    if(info->lifecycle == NULL)
     {
-        int err;
-
-        info->default_config_path = dc_malloc(info->env, &err, strlen(default_config_path) + 1);
-        strcpy(info->default_config_path, default_config_path);
+        ret_val = -1;
     }
+    else
+    {
+        info->argc = argc;
+        info->argv = argv;
 
-    fsm_info = dc_fsm_info_create(info->env, info->name, info->verbose_file);
-    ret_val = dc_fsm_run(fsm_info, &from_state, &to_state, info, transitions);
-    dc_fsm_info_destroy(info->env, &fsm_info);
-    dc_application_lifecycle_destroy(info->env, &info->lifecycle);
+        if(default_config_path)
+        {
+            int err;
+
+            info->default_config_path = dc_malloc(info->env, &err, strlen(default_config_path) + 1);
+            strcpy(info->default_config_path, default_config_path);
+        }
+
+        fsm_info = dc_fsm_info_create(info->env, info->name, info->verbose_file);
+        ret_val = dc_fsm_run(fsm_info, &from_state, &to_state, info, transitions);
+        dc_fsm_info_destroy(info->env, &fsm_info);
+        dc_application_lifecycle_destroy(info->env, &info->lifecycle);
+    }
 
     return ret_val;
 }
