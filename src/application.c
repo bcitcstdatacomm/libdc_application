@@ -146,7 +146,7 @@ struct dc_application_info *dc_application_info_create(const char *name,
     struct dc_application_info *info;
     int                         err;
 
-    info = dc_malloc(env, &err, sizeof(struct dc_application_info));
+    info = dc_calloc(env, &err, 1, sizeof(struct dc_application_info));
 
     if(info == NULL)
     {
@@ -161,7 +161,6 @@ struct dc_application_info *dc_application_info_create(const char *name,
     }
 
     strcpy(info->name, name);
-    info->default_config_path = NULL;
 
     return info;
 }
