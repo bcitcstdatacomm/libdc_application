@@ -44,6 +44,8 @@ struct dc_setting
 
 struct dc_setting_path;
 struct dc_setting_bool;
+struct dc_setting_uint16;
+
 
 /**
  *
@@ -108,5 +110,32 @@ bool dc_setting_bool_set(struct dc_setting_bool *setting, bool value, dc_setting
  */
 bool dc_setting_bool_get(struct dc_setting_bool *setting);
 
+/**
+ *
+ * @return
+ */
+struct dc_setting_uint16 *dc_setting_uint16_create(void);
+
+/**
+ *
+ * @param psetting
+ */
+void dc_setting_uint16_destroy(struct dc_setting_uint16 **psetting);
+
+/**
+ *
+ * @param setting
+ * @param value
+ * @param type
+ * @return
+ */
+bool dc_setting_uint16_set(struct dc_setting_uint16 *setting, uint16_t value, dc_setting_type type);
+
+/**
+ *
+ * @param setting
+ * @return
+ */
+uint16_t dc_setting_uint16_get(struct dc_setting_uint16 *setting);
 
 #endif // LIBDC_APPLICATION_SETTINGS_H

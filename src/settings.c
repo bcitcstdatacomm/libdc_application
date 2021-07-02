@@ -34,6 +34,12 @@ struct dc_setting_bool
     struct dc_setting parent;
     bool value;
 };
+
+struct dc_setting_uint16
+{
+    struct dc_setting parent;
+    uint16_t value;
+};
 #pragma GCC diagnostic pop
 
 bool dc_setting_is_set(struct dc_setting *setting)
@@ -120,6 +126,47 @@ bool dc_setting_bool_set(struct dc_setting_bool *setting, bool value, dc_setting
 }
 
 bool dc_setting_bool_get(struct dc_setting_bool *setting)
+{
+    return setting->value;
+}
+
+struct dc_setting_uint16 *dc_setting_uint16_create(void)
+{
+    struct dc_setting_uint16 *setting;
+
+    setting = malloc(sizeof(struct dc_setting_uint16));
+    setting->parent.type = DC_SETTING_NONE;
+    setting->value       = 0;
+
+    return setting;
+}
+
+void dc_setting_uint16_destroy(struct dc_setting_uint16 **psetting)
+{
+    memset(*psetting, 0, sizeof(struct dc_setting_uint16));
+    free(*psetting);
+    *psetting = NULL;
+}
+
+bool dc_setting_uint16_set(struct dc_setting_uint16 *setting, uint16_t value, dc_setting_type type)
+{
+    bool ret_val;
+
+    if(setting->parent.type == DC_SETTING_NONE)
+    {
+        setting->parent.type = type;
+        setting->value = value;
+        ret_val = true;
+    }
+    else
+    {
+        ret_val = false;
+    }
+
+    return ret_val;
+}
+
+uint16_t dc_setting_uint16_get(struct dc_setting_uint16 *setting)
 {
     return setting->value;
 }
