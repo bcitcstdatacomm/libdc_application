@@ -161,6 +161,7 @@ struct dc_application_info *dc_application_info_create(const char *name,
     }
 
     strcpy(info->name, name);
+    info->default_config_path = NULL;
 
     return info;
 }
