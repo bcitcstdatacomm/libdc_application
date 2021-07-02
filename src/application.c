@@ -168,13 +168,24 @@ struct dc_application_info *dc_application_info_create(const char *name,
 
 void dc_application_info_destroy(struct dc_application_info **pinfo)
 {
+    struct dc_application_info *info;
     const struct dc_posix_env *env;
 
-    env = (*pinfo)->env;
-    memset((*pinfo)->default_config_path, '\0', strlen((*pinfo)->default_config_path));
-    dc_free(env, (*pinfo)->default_config_path);
-    memset((*pinfo)->name, '\0', strlen((*pinfo)->name));
-    dc_free(env, (*pinfo)->name);
+    info = *pinfo;
+    env = info->env;
+
+    if(info->default_config_path)
+    {
+        memset(info->default_config_path, '\0', strlen(info->default_config_path));
+        dc_free(env, (*pinfo)->default_config_path);
+    }
+
+    if(info->name)
+    {
+        memset(info->name, '\0', strlen(info->name));
+        dc_free(env, info->name);
+    }
+
     memset(*pinfo, 0, sizeof(struct dc_application_info));
     dc_free(env, *pinfo);
     *pinfo = NULL;
