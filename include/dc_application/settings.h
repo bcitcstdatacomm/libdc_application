@@ -19,9 +19,9 @@
  */
 
 
+#include <dc_posix/posix_env.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <dc_posix/posix_env.h>
 
 
 // TODO: move these to the .c file and change the arguments to the functins
@@ -42,6 +42,8 @@ struct dc_setting
     dc_setting_type type;
 };
 
+struct dc_setting_string;
+struct dc_setting_regex;
 struct dc_setting_path;
 struct dc_setting_bool;
 struct dc_setting_uint16;
@@ -52,19 +54,75 @@ struct dc_setting_uint16;
  * @param setting
  * @return
  */
-bool dc_setting_is_set(struct dc_setting *setting);
+bool dc_setting_is_set(const struct dc_posix_env *env, struct dc_setting *setting);
 
 /**
  *
  * @return
  */
-struct dc_setting_path *dc_setting_path_create(void);
+struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *env);
 
 /**
  *
  * @param psetting
  */
-void dc_setting_path_destroy(struct dc_setting_path **psetting);
+void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting_string **psetting);
+
+/**
+ *
+ * @param setting
+ * @param value
+ * @param type
+ * @return
+ */
+bool dc_setting_string_set(const struct dc_posix_env *env, struct dc_setting_string *setting, const char *value, dc_setting_type type);
+
+/**
+ *
+ * @param setting
+ * @return
+ */
+const char *dc_setting_string_get(const struct dc_posix_env *env, struct dc_setting_string *setting);
+
+/**
+ *
+ * @return
+ */
+struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env);
+
+/**
+ *
+ * @param psetting
+ */
+void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_regex **psetting);
+
+/**
+ *
+ * @param setting
+ * @param value
+ * @param type
+ * @return
+ */
+bool dc_setting_regex_set(const struct dc_posix_env *env, struct dc_setting_regex *setting, const char *value, dc_setting_type type);
+
+/**
+ *
+ * @param setting
+ * @return
+ */
+const char *dc_setting_regex_get(const struct dc_posix_env *env, struct dc_setting_regex *setting);
+
+/**
+ *
+ * @return
+ */
+struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env);
+
+/**
+ *
+ * @param psetting
+ */
+void dc_setting_path_destroy(const struct dc_posix_env *env, struct dc_setting_path **psetting);
 
 /**
  *
@@ -80,19 +138,19 @@ bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_setting_path 
  * @param setting
  * @return
  */
-const char *dc_setting_path_get(struct dc_setting_path *setting);
+const char *dc_setting_path_get(const struct dc_posix_env *env, struct dc_setting_path *setting);
 
 /**
  *
  * @return
  */
-struct dc_setting_bool *dc_setting_bool_create(void);
+struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env);
 
 /**
  *
  * @param psetting
  */
-void dc_setting_bool_destroy(struct dc_setting_bool **psetting);
+void dc_setting_bool_destroy(const struct dc_posix_env *env, struct dc_setting_bool **psetting);
 
 /**
  *
@@ -101,26 +159,26 @@ void dc_setting_bool_destroy(struct dc_setting_bool **psetting);
  * @param type
  * @return
  */
-bool dc_setting_bool_set(struct dc_setting_bool *setting, bool value, dc_setting_type type);
+bool dc_setting_bool_set(const struct dc_posix_env *env, struct dc_setting_bool *setting, bool value, dc_setting_type type);
 
 /**
  *
  * @param setting
  * @return
  */
-bool dc_setting_bool_get(struct dc_setting_bool *setting);
+bool dc_setting_bool_get(const struct dc_posix_env *env, struct dc_setting_bool *setting);
 
 /**
  *
  * @return
  */
-struct dc_setting_uint16 *dc_setting_uint16_create(void);
+struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *env);
 
 /**
  *
  * @param psetting
  */
-void dc_setting_uint16_destroy(struct dc_setting_uint16 **psetting);
+void dc_setting_uint16_destroy(const struct dc_posix_env *env, struct dc_setting_uint16 **psetting);
 
 /**
  *
@@ -129,13 +187,13 @@ void dc_setting_uint16_destroy(struct dc_setting_uint16 **psetting);
  * @param type
  * @return
  */
-bool dc_setting_uint16_set(struct dc_setting_uint16 *setting, uint16_t value, dc_setting_type type);
+bool dc_setting_uint16_set(const struct dc_posix_env *env, struct dc_setting_uint16 *setting, uint16_t value, dc_setting_type type);
 
 /**
  *
  * @param setting
  * @return
  */
-uint16_t dc_setting_uint16_get(struct dc_setting_uint16 *setting);
+uint16_t dc_setting_uint16_get(const struct dc_posix_env *env, struct dc_setting_uint16 *setting);
 
 #endif // LIBDC_APPLICATION_SETTINGS_H

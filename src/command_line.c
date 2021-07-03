@@ -22,13 +22,14 @@
 #include <dc_posix/stdlib.h>
 
 
-int dc_default_parse_command_line(struct dc_application_settings *settings, int argc, char *argv[])
+int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_application_settings *settings, int argc, char *argv[])
 {
     struct dc_opt_settings *opt_settings;
     size_t                       count;
     int                          err;
     struct option               *long_options;
 
+    DC_TRACE(env);
     opt_settings = (struct dc_opt_settings *)settings;
     count        = 0;
 
@@ -37,7 +38,7 @@ int dc_default_parse_command_line(struct dc_application_settings *settings, int 
         count++;
     }
 
-    long_options = dc_calloc(settings->env, &err, count + 1, sizeof(struct option));
+    long_options = dc_calloc(env, &err, count + 1, sizeof(struct option));
 
     for(size_t i = 0; i < count; i++)
     {
@@ -64,8 +65,8 @@ int dc_default_parse_command_line(struct dc_application_settings *settings, int 
         }
 
         opt   = &opt_settings->opts[option_index];
-        value = opt->read_from_string(settings->env, optarg);
-        opt->setting_func(settings->env, opt->setting, value, DC_SETTING_COMMAND_LINE);
+        value = opt->read_from_string(env, optarg);
+        opt->setting_func(env, opt->setting, value, DC_SETTING_COMMAND_LINE);
     }
 
     free(long_options);

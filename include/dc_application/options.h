@@ -3,6 +3,7 @@
 
 
 #include "application.h"
+#include <dc_posix/posix_env.h>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpadded"
 #include <libconfig.h>

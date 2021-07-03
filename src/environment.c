@@ -22,25 +22,27 @@
 #include <stdlib.h>
 
 
-static bool set_from_env(struct dc_opt_settings *settings,
+static bool set_from_env(const struct dc_posix_env *env,
+                         struct dc_opt_settings *settings,
                          size_t prefix_len,
                          const char *key,
                          const char *value);
 
 
-int dc_default_read_env_vars(struct dc_application_settings *settings, char **env)
+int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_application_settings *settings, char **envvars)
 {
     struct dc_opt_settings *opt_settings;
     const char             *prefix;
     size_t                  prefix_len;
 
+    DC_TRACE(env);
     opt_settings = (struct dc_opt_settings *)settings;
     prefix       = opt_settings->env_prefix;
     prefix_len   = strlen(prefix);
 
-    while(*env)
+    while(*envvars)
     {
-        if(strncmp(*env, prefix, prefix_len) == 0)
+        if(strncmp(*envvars, prefix, prefix_len) == 0)
         {
             char   *env_var;
             size_t  length;
@@ -49,28 +51,29 @@ int dc_default_read_env_vars(struct dc_application_settings *settings, char **en
             char   *value;
             int     err;
 
-            length  = strlen(*env) + 1;
-            env_var = dc_malloc(settings->env, &err, length * sizeof(char));
+            length  = strlen(*envvars) + 1;
+            env_var = dc_malloc(env, &err, length * sizeof(char));
 
             if(env_var == NULL)
             {
             }
 
-            strcpy(env_var, *env);
+            strcpy(env_var, *envvars);
             rest  = NULL;
             key   = strtok_r(env_var, "=", &rest);
             value = strtok_r(NULL, "=", &rest);
-            set_from_env(opt_settings, prefix_len, key, value);
+            set_from_env(env, opt_settings, prefix_len, key, value);
             free(env_var);
         }
 
-        env++;
+        envvars++;
     }
 
     return 0;
 }
 
-static bool set_from_env(struct dc_opt_settings *settings,
+static bool set_from_env(const struct dc_posix_env *env,
+                         struct dc_opt_settings *settings,
                          size_t prefix_len,
                          const char *env_key,
                          const char *env_value)
@@ -78,6 +81,7 @@ static bool set_from_env(struct dc_opt_settings *settings,
     const char *sub_key;
     bool        found;
 
+    DC_TRACE(env);
     sub_key = &env_key[prefix_len];
     found = false;
 
@@ -91,8 +95,8 @@ static bool set_from_env(struct dc_opt_settings *settings,
         {
             const void *value;
 
-            value = opt->read_from_string(settings->parent.env, env_value);
-            opt->setting_func(settings->parent.env, opt->setting, value, DC_SETTING_ENVIRONMENT);
+            value = opt->read_from_string(env, env_value);
+            opt->setting_func(env, opt->setting, value, DC_SETTING_ENVIRONMENT);
             found = true;
         }
     }

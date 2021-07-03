@@ -20,9 +20,10 @@
 
 
 #include "application.h"
+#include <dc_posix/posix_env.h>
 
 
-int dc_default_parse_command_line(struct dc_application_settings *settings, int argc, char *argv[]);
+int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_application_settings *settings, int argc, char *argv[]);
 
 
 #endif // LIBDC_APPLICATION_COMMAND_LINE_H

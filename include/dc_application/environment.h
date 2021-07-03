@@ -20,9 +20,10 @@
 
 
 #include "application.h"
+#include <dc_posix/posix_env.h>
 
 
-int dc_default_read_env_vars(struct dc_application_settings *settings, char **env);
+int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_application_settings *settings, char **envvars);
 
 
 #endif // LIBDC_APPLICATION_ENVIRONMENT_H
