@@ -17,19 +17,19 @@
 
 #include "environment.h"
 #include "options.h"
-#include <string.h>
 #include <dc_posix/stdlib.h>
-#include <stdlib.h>
+#include <dc_posix/string.h>
 
 
 static bool set_from_env(const struct dc_posix_env *env,
+                         struct dc_error *err,
                          struct dc_opt_settings *settings,
                          size_t prefix_len,
                          const char *key,
                          const char *value);
 
 
-int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_application_settings *settings, char **envvars)
+int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings, char **envvars)
 {
     struct dc_opt_settings *opt_settings;
     const char             *prefix;
@@ -38,32 +38,38 @@ int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_applicati
     DC_TRACE(env);
     opt_settings = (struct dc_opt_settings *)settings;
     prefix       = opt_settings->env_prefix;
-    prefix_len   = strlen(prefix);
+    prefix_len   = dc_strlen(env, prefix);
 
     while(*envvars)
     {
-        if(strncmp(*envvars, prefix, prefix_len) == 0)
+        if(dc_strncmp(env, *envvars, prefix, prefix_len) == 0)
         {
-            char   *env_var;
             size_t  length;
-            char   *rest;
-            char   *key;
-            char   *value;
-            int     err;
+            char   *env_var;
 
-            length  = strlen(*envvars) + 1;
-            env_var = dc_malloc(env, &err, length * sizeof(char));
+            length  = dc_strlen(env, *envvars) + 1;
+            env_var = dc_malloc(env, err, length * sizeof(char));
 
-            if(env_var == NULL)
+            if(DC_HAS_NO_ERROR(err))
             {
-            }
+                char *rest;
+                char *key;
+                char *value;
 
-            strcpy(env_var, *envvars);
-            rest  = NULL;
-            key   = strtok_r(env_var, "=", &rest);
-            value = strtok_r(NULL, "=", &rest);
-            set_from_env(env, opt_settings, prefix_len, key, value);
-            free(env_var);
+                dc_strcpy(env, env_var, *envvars);
+                rest  = NULL;
+
+                // TODO: what if no token found??
+                key   = dc_strtok_r(env, env_var, "=", &rest);
+
+                // TODO: why am I using ?
+                // TODO: what if no token found?
+                value = dc_strtok_r(env, NULL, "=", &rest);
+
+                // TODO: what to do about an err?
+                set_from_env(env, err, opt_settings, prefix_len, key, value);
+                dc_free(env, env_var, length * sizeof(char));
+            }
         }
 
         envvars++;
@@ -73,10 +79,11 @@ int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_applicati
 }
 
 static bool set_from_env(const struct dc_posix_env *env,
-                         struct dc_opt_settings *settings,
-                         size_t prefix_len,
-                         const char *env_key,
-                         const char *env_value)
+                         struct dc_error           *err,
+                         struct dc_opt_settings    *settings,
+                         size_t                     prefix_len,
+                         const char                *env_key,
+                         const char                *env_value)
 {
     const char *sub_key;
     bool        found;
@@ -91,12 +98,14 @@ static bool set_from_env(const struct dc_posix_env *env,
 
         opt = &settings->opts[i];
 
-        if(strcmp(sub_key, opt->env_key) == 0)
+        if(dc_strcmp(env, sub_key, opt->env_key) == 0)
         {
             const void *value;
 
-            value = opt->read_from_string(env, env_value);
-            opt->setting_func(env, opt->setting, value, DC_SETTING_ENVIRONMENT);
+            value = opt->read_from_string(env, err, env_value);
+            opt->setting_func(env, err, opt->setting, value, DC_SETTING_ENVIRONMENT);
+
+            // TODO: what to do about an err?
             found = true;
         }
     }

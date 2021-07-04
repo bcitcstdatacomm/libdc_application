@@ -17,10 +17,9 @@
 
 #include "settings.h"
 #include <dc_util/path.h>
-#include <stdlib.h>
-#include <string.h>
-#include <regex.h>
 #include <dc_posix/stdlib.h>
+#include <dc_posix/string.h>
+#include <regex.h>
 
 
 #pragma GCC diagnostic push
@@ -64,14 +63,18 @@ bool dc_setting_is_set(const struct dc_posix_env *env, struct dc_setting *settin
     return setting->type != DC_SETTING_NONE;
 }
 
-struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env)
+struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env, struct dc_error *err)
 {
     struct dc_setting_path *setting;
 
     DC_TRACE(env);
-    setting = malloc(sizeof(struct dc_setting_path));
-    setting->parent.type = DC_SETTING_NONE;
-    setting->path        = NULL;
+    setting = dc_malloc(env, err, sizeof(struct dc_setting_path));
+
+    if(DC_HAS_NO_ERROR(err))
+    {
+        setting->parent.type = DC_SETTING_NONE;
+        setting->path        = NULL;
+    }
 
     return setting;
 }
@@ -83,37 +86,38 @@ void dc_setting_path_destroy(const struct dc_posix_env *env, struct dc_setting_p
     DC_TRACE(env);
     setting = *psetting;
 
-    if(env->zero_free)
+    if(setting->path)
     {
-        memset(setting->path, 0, strlen(setting->path));
+        size_t length;
+
+        length = dc_strlen(env, setting->path);
+        dc_free(env, setting->path, length);
     }
 
-    dc_free(env, setting->path);
+    dc_free(env, *psetting, sizeof(struct dc_setting_path));
 
-    if(env->zero_free)
+    if(env->null_free)
     {
-        memset(setting, 0, sizeof(struct dc_setting_path));
+        *psetting = NULL;
     }
-
-    dc_free(env, *psetting);
-    *psetting = NULL;
 }
 
-bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_setting_path *setting, const char *value, dc_setting_type type)
+bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting_path *setting, const char *value, dc_setting_type type)
 {
     bool ret_val;
 
     DC_TRACE(env);
+    ret_val = false;
 
     if(setting->parent.type == DC_SETTING_NONE)
     {
-        expand_path(env, &setting->path, value);
-        setting->parent.type = type;
-        ret_val = true;
-    }
-    else
-    {
-        ret_val = false;
+        expand_path(env, err, &setting->path, value);
+
+        if(DC_HAS_NO_ERROR(err))
+        {
+            setting->parent.type = type;
+            ret_val = true;
+        }
     }
 
     return ret_val;
@@ -126,33 +130,37 @@ const char *dc_setting_path_get(const struct dc_posix_env *env, struct dc_settin
     return setting->path;
 }
 
-struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *env)
+struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *env, struct dc_error *err)
 {
     struct dc_setting_string *setting;
-    int err;
 
     DC_TRACE(env);
+    setting = dc_malloc(env, err, sizeof(struct dc_setting_string));
 
-    setting = dc_malloc(env, &err, sizeof(struct dc_setting_string));
-
-    if(setting == NULL)
+    if(DC_HAS_NO_ERROR(err))
     {
+        setting->parent.type = DC_SETTING_NONE;
+        setting->string      = NULL;
     }
-
-    setting->parent.type = DC_SETTING_NONE;
-    setting->string      = NULL;
 
     return setting;
 }
 
 void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting_string **psetting)
 {
-    DC_TRACE(env);
+    struct dc_setting_string *setting;
+    size_t length;
 
-    dc_free(env, (*psetting)->string);
-    memset(*psetting, 0, sizeof(struct dc_setting_string));
-    dc_free(env, *psetting);
-    *psetting = NULL;
+    DC_TRACE(env);
+    setting = *psetting;
+    length  = dc_strlen(env, setting->string);
+    dc_free(env, setting->string, length);
+    dc_free(env, *psetting, sizeof(struct dc_setting_string));
+
+    if(env->null_free)
+    {
+        *psetting = NULL;
+    }
 }
 
 bool dc_setting_string_set(const struct dc_posix_env *env, struct dc_setting_string *setting, const char *value, dc_setting_type type)
@@ -165,7 +173,7 @@ bool dc_setting_string_set(const struct dc_posix_env *env, struct dc_setting_str
     {
         setting->string      = value;
         setting->parent.type = type;
-        ret_val = true;
+        ret_val              = true;
     }
     else
     {
@@ -182,32 +190,36 @@ const char *dc_setting_string_get(const struct dc_posix_env *env, struct dc_sett
     return setting->string;
 }
 
-struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env)
+struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err)
 {
     struct dc_setting_regex *setting;
-    int err;
 
     DC_TRACE(env);
-    setting = dc_malloc(env, &err, sizeof(struct dc_setting_regex));
+    setting = dc_malloc(env, err, sizeof(struct dc_setting_regex));
 
-    if(setting == NULL)
+    if(DC_HAS_NO_ERROR(err))
     {
+        setting->parent.type = DC_SETTING_NONE;
+        setting->regex       = NULL;
+        setting->string      = NULL;
     }
-
-    setting->parent.type = DC_SETTING_NONE;
-    setting->regex       = NULL;
-    setting->string      = NULL;
 
     return setting;
 }
 
 void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_regex **psetting)
 {
+    struct dc_setting_regex *setting;
+
     DC_TRACE(env);
-    dc_free(env, (*psetting)->regex);
-    memset(*psetting, 0, sizeof(struct dc_setting_path));
-    dc_free(env, *psetting);
-    *psetting = NULL;
+    setting = *psetting;
+    regfree(setting->regex);
+    dc_free(env, setting, sizeof(struct dc_setting_path));
+
+    if(env->null_free)
+    {
+        *psetting = NULL;
+    }
 }
 
 bool dc_setting_regex_set(const struct dc_posix_env *env, struct dc_setting_regex *setting, const char *value, dc_setting_type type)
@@ -237,20 +249,18 @@ const char *dc_setting_regex_get(const struct dc_posix_env *env, struct dc_setti
     return setting->string;
 }
 
-struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env)
+struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env, struct dc_error *err)
 {
     struct dc_setting_bool *setting;
-    int err;
 
     DC_TRACE(env);
-    setting = dc_malloc(env, &err, sizeof(struct dc_setting_bool));
+    setting = dc_malloc(env, err, sizeof(struct dc_setting_bool));
 
-    if(setting == NULL)
+    if(DC_HAS_NO_ERROR(err))
     {
+        setting->parent.type = DC_SETTING_NONE;
+        setting->value       = false;
     }
-
-    setting->parent.type = DC_SETTING_NONE;
-    setting->value       = false;
 
     return setting;
 }
@@ -258,9 +268,12 @@ struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env)
 void dc_setting_bool_destroy(const struct dc_posix_env *env, struct dc_setting_bool **psetting)
 {
     DC_TRACE(env);
-    memset(*psetting, 0, sizeof(struct dc_setting_bool));
-    dc_free(env, *psetting);
-    *psetting = NULL;
+    dc_free(env, *psetting, sizeof(struct dc_setting_bool));
+
+    if(env->null_free)
+    {
+        *psetting = NULL;
+    }
 }
 
 bool dc_setting_bool_set(const struct dc_posix_env *env, struct dc_setting_bool *setting, bool value, dc_setting_type type)
@@ -272,8 +285,8 @@ bool dc_setting_bool_set(const struct dc_posix_env *env, struct dc_setting_bool 
     if(setting->parent.type == DC_SETTING_NONE)
     {
         setting->parent.type = type;
-        setting->value = value;
-        ret_val = true;
+        setting->value       = value;
+        ret_val              = true;
     }
     else
     {
@@ -290,20 +303,18 @@ bool dc_setting_bool_get(const struct dc_posix_env *env, struct dc_setting_bool 
     return setting->value;
 }
 
-struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *env)
+struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *env, struct dc_error *err)
 {
     struct dc_setting_uint16 *setting;
-    int err;
 
     DC_TRACE(env);
-    setting = dc_malloc(env, &err, sizeof(struct dc_setting_uint16));
+    setting = dc_malloc(env, err, sizeof(struct dc_setting_uint16));
 
-    if(setting == NULL)
+    if(DC_HAS_NO_ERROR(err))
     {
+        setting->parent.type = DC_SETTING_NONE;
+        setting->value       = 0;
     }
-
-    setting->parent.type = DC_SETTING_NONE;
-    setting->value       = 0;
 
     return setting;
 }
@@ -311,9 +322,12 @@ struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *en
 void dc_setting_uint16_destroy(const struct dc_posix_env *env, struct dc_setting_uint16 **psetting)
 {
     DC_TRACE(env);
-    memset(*psetting, 0, sizeof(struct dc_setting_uint16));
-    dc_free(env, *psetting);
-    *psetting = NULL;
+    dc_free(env, *psetting, sizeof(struct dc_setting_uint16));
+
+    if(env->null_free)
+    {
+        *psetting = NULL;
+    }
 }
 
 bool dc_setting_uint16_set(const struct dc_posix_env *env, struct dc_setting_uint16 *setting, uint16_t value, dc_setting_type type)
@@ -325,8 +339,8 @@ bool dc_setting_uint16_set(const struct dc_posix_env *env, struct dc_setting_uin
     if(setting->parent.type == DC_SETTING_NONE)
     {
         setting->parent.type = type;
-        setting->value = value;
-        ret_val = true;
+        setting->value       = value;
+        ret_val              = true;
     }
     else
     {

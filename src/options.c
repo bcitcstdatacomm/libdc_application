@@ -20,12 +20,12 @@
 #include <dc_util/types.h>
 
 
-void dc_options_set_path(const struct dc_posix_env *env, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_path(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
 {
-    dc_setting_path_set(env, (struct dc_setting_path *)setting, (const char *)value, type);
+    dc_setting_path_set(env, err, (struct dc_setting_path *)setting, (const char *)value, type);
 }
 
-void dc_options_set_bool(__attribute__((unused)) const struct dc_posix_env *env, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_bool(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
 {
     const bool *pbool;
 
@@ -33,7 +33,7 @@ void dc_options_set_bool(__attribute__((unused)) const struct dc_posix_env *env,
     dc_setting_bool_set(env, (struct dc_setting_bool *)setting, *pbool, type);
 }
 
-void dc_options_set_uint16(__attribute__((unused)) const struct dc_posix_env *env, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_uint16(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
 {
     const uint16_t *punit16;
 
@@ -41,14 +41,14 @@ void dc_options_set_uint16(__attribute__((unused)) const struct dc_posix_env *en
     dc_setting_uint16_set(env, (struct dc_setting_uint16 *)setting, *punit16, type);
 }
 
-const void *dc_string_from_string(const struct dc_posix_env *env, const char *str)
+const void *dc_string_from_string(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, const char *str)
 {
     DC_TRACE(env);
 
     return str;
 }
 
-const void *dc_flag_from_string(const struct dc_posix_env *env, __attribute__((unused))  const char *str)
+const void *dc_flag_from_string(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, __attribute__((unused))  const char *str)
 {
     static bool value = true;
 
@@ -57,19 +57,23 @@ const void *dc_flag_from_string(const struct dc_posix_env *env, __attribute__((u
     return &value;
 }
 
-const void *dc_uint16_from_string(const struct dc_posix_env *env, const char *str)
+const void *dc_uint16_from_string(const struct dc_posix_env *env, struct dc_error *err, const char *str)
 {
-    int       err;
     uint16_t *value;
 
     DC_TRACE(env);
-    value = dc_malloc(env, &err, sizeof(uint16_t));
+    value = dc_malloc(env, err, sizeof(uint16_t));
 
-    if(value == NULL)
+    if(DC_HAS_NO_ERROR(err))
     {
-    }
+        *value = dc_uint16_from_str(env, err, str, 10);
 
-    *value = dc_uint16_from_str(env, &err, str, 10);
+        if(DC_HAS_ERROR(err))
+        {
+            dc_free(env, value, sizeof(uint16_t));
+            value = NULL;
+        }
+    }
 
     return value;
 }

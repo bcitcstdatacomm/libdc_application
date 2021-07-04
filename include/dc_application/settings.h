@@ -60,7 +60,7 @@ bool dc_setting_is_set(const struct dc_posix_env *env, struct dc_setting *settin
  *
  * @return
  */
-struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *env);
+struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *env, struct dc_error *err);
 
 /**
  *
@@ -88,7 +88,7 @@ const char *dc_setting_string_get(const struct dc_posix_env *env, struct dc_sett
  *
  * @return
  */
-struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env);
+struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err);
 
 /**
  *
@@ -116,7 +116,7 @@ const char *dc_setting_regex_get(const struct dc_posix_env *env, struct dc_setti
  *
  * @return
  */
-struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env);
+struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env, struct dc_error *err);
 
 /**
  *
@@ -131,7 +131,7 @@ void dc_setting_path_destroy(const struct dc_posix_env *env, struct dc_setting_p
  * @param type
  * @return
  */
-bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_setting_path *setting, const char *value, dc_setting_type type);
+bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting_path *setting, const char *value, dc_setting_type type);
 
 /**
  *
@@ -144,7 +144,7 @@ const char *dc_setting_path_get(const struct dc_posix_env *env, struct dc_settin
  *
  * @return
  */
-struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env);
+struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env, struct dc_error *err);
 
 /**
  *
@@ -172,7 +172,7 @@ bool dc_setting_bool_get(const struct dc_posix_env *env, struct dc_setting_bool 
  *
  * @return
  */
-struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *env);
+struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *env, struct dc_error *err);
 
 /**
  *

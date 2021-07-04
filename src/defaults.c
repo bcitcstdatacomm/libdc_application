@@ -19,7 +19,7 @@
 #include "options.h"
 
 
-int dc_default_set_defaults(const struct dc_posix_env *env, struct dc_application_settings *settings)
+int dc_default_set_defaults(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_application_settings *settings)
 {
     struct dc_opt_settings *opt_settings;
 
@@ -34,7 +34,12 @@ int dc_default_set_defaults(const struct dc_posix_env *env, struct dc_applicatio
 
         if(opt->default_value)
         {
-            opt->setting_func(env, opt->setting, opt->default_value, DC_SETTING_DEFAULT);
+            opt->setting_func(env, err, opt->setting, opt->default_value, DC_SETTING_DEFAULT);
+
+            if(DC_HAS_ERROR(err))
+            {
+                // TODO: now what?
+            }
         }
     }
 

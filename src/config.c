@@ -20,7 +20,7 @@
 #include <dc_posix/stdlib.h>
 
 
-int dc_default_load_config(const struct dc_posix_env *env, struct dc_application_settings *settings)
+int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_application_settings *settings)
 {
     const char *config_path;
     config_t    config;
@@ -35,6 +35,7 @@ int dc_default_load_config(const struct dc_posix_env *env, struct dc_application
         // if the config file was passed in on the command line or set as an env var then it needs to exist
         if(dc_setting_is_set(env, (struct dc_setting *)settings->config_path))
         {
+            // TODO: this should be an error somehow - time to figure that out!
             fprintf(stderr, "%s:%d - %s\n", config_error_file(&config),
                     config_error_line(&config), config_error_text(&config));
             config_destroy(&config);
@@ -63,8 +64,17 @@ int dc_default_load_config(const struct dc_posix_env *env, struct dc_application
 
                 if(item != NULL)
                 {
-                    value = opt->read_from_config(env, item);
-                    opt->setting_func(env, opt->setting, value, DC_SETTING_CONFIG);
+                    value = opt->read_from_config(env, err, item);
+
+                    if(DC_HAS_NO_ERROR(err))
+                    {
+                        opt->setting_func(env, err, opt->setting, value, DC_SETTING_CONFIG);
+                    }
+
+                    if(DC_HAS_ERROR(err))
+                    {
+                        // TODO: now what?
+                    }
                 }
             }
         }
@@ -75,16 +85,16 @@ int dc_default_load_config(const struct dc_posix_env *env, struct dc_application
     return 0;
 }
 
-const void *dc_string_from_config(const struct dc_posix_env *env, config_setting_t *item)
+const void *dc_string_from_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, config_setting_t *item)
 {
     DC_TRACE(env);
 
     return item->value.sval;
 }
 
-const void *dc_flag_from_config(const struct dc_posix_env *env, config_setting_t *item)
+const void *dc_flag_from_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, config_setting_t *item)
 {
-    static bool true_value = true;
+    static bool true_value  = true;
     static bool false_value = false;
     int value;
 
@@ -99,9 +109,8 @@ const void *dc_flag_from_config(const struct dc_posix_env *env, config_setting_t
     return &false_value;
 }
 
-const void *dc_uint16_from_config(const struct dc_posix_env *env, config_setting_t *item)
+const void *dc_uint16_from_config(const struct dc_posix_env *env, struct dc_error *err, config_setting_t *item)
 {
-    int       err;
     long long config_value;
     uint16_t *value;
 
@@ -113,13 +122,12 @@ const void *dc_uint16_from_config(const struct dc_posix_env *env, config_setting
         return NULL;
     }
 
-    value = dc_malloc(env, &err, sizeof(uint16_t));
+    value = dc_malloc(env, err, sizeof(uint16_t));
 
-    if(value == NULL)
+    if(DC_HAS_NO_ERROR(err))
     {
+        *value = (uint16_t)config_value;
     }
-
-    *value = (uint16_t)config_value;
 
     return value;
 }
