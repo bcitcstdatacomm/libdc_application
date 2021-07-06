@@ -20,10 +20,23 @@
 #include <dc_util/types.h>
 
 
+void dc_options_set_string(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+{
+    dc_setting_string_set(env, err, (struct dc_setting_string *)setting, (const char *)value, type);
+}
+
+
+void dc_options_set_regex(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+{
+    dc_setting_regex_set(env, err, (struct dc_setting_regex *)setting, (const char *)value, type);
+}
+
+
 void dc_options_set_path(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
 {
     dc_setting_path_set(env, err, (struct dc_setting_path *)setting, (const char *)value, type);
 }
+
 
 void dc_options_set_bool(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
 {

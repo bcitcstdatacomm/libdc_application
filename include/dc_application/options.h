@@ -55,6 +55,8 @@ struct dc_opt_settings
 };
 
 
+void dc_options_set_string(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
+void dc_options_set_regex(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 void dc_options_set_path(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 void dc_options_set_bool(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 void dc_options_set_uint16(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);

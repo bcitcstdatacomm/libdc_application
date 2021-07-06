@@ -75,7 +75,7 @@ void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting
  * @param type
  * @return
  */
-bool dc_setting_string_set(const struct dc_posix_env *env, struct dc_setting_string *setting, const char *value, dc_setting_type type);
+bool dc_setting_string_set(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting_string *setting, const char *value, dc_setting_type type);
 
 /**
  *
@@ -88,7 +88,7 @@ const char *dc_setting_string_get(const struct dc_posix_env *env, struct dc_sett
  *
  * @return
  */
-struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err);
+struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err, const char *pattern);
 
 /**
  *
@@ -103,7 +103,7 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
  * @param type
  * @return
  */
-bool dc_setting_regex_set(const struct dc_posix_env *env, struct dc_setting_regex *setting, const char *value, dc_setting_type type);
+bool dc_setting_regex_set(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting_regex *setting, const char *value, dc_setting_type type);
 
 /**
  *
