@@ -85,6 +85,7 @@ void dc_application_lifecycle_set_parse_command_line(const struct dc_posix_env *
  */
 void dc_application_lifecycle_set_cleanup(const struct dc_posix_env *env, struct dc_application_lifecycle *lifecycle, int (*func)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings));
 
+
 /**
  *
  * @param name
@@ -102,21 +103,27 @@ struct dc_application_info *dc_application_info_create(const struct dc_posix_env
  */
 void dc_application_info_destroy(const struct dc_posix_env *env, struct dc_application_info **pinfo);
 
+
 /**
  *
+ * @param env
+ * @param err
  * @param info
  * @param create_lifecycle_func
+ * @param destroy_lifecycle_func
  * @param default_config_path
  * @param argc
  * @param argv
  * @return
  */
-int dc_application_run(const struct dc_posix_env  *env,
-                       struct dc_error            *err,
-                       struct dc_application_info *info,
+int dc_application_run(const struct dc_posix_env       *env,
+                       struct dc_error                 *err,
+                       struct dc_application_info      *info,
                        struct dc_application_lifecycle *(*create_lifecycle_func)(const struct dc_posix_env *env, struct dc_error *err),
-                       const char *default_config_path,
-                       int argc,
-                       char *argv[]);
+                       void (*destroy_lifecycle_func)(const struct dc_posix_env *env, struct dc_application_lifecycle **plifecycle),
+                       const char                      *default_config_path,
+                       int                              argc,
+                       char                            *argv[]);
+
 
 #endif // LIBDC_APPLICATION_APPLICATION_H

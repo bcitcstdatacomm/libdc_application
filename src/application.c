@@ -172,7 +172,7 @@ struct dc_application_info *dc_application_info_create(const struct dc_posix_env
         }
         else
         {
-            dc_free(env, info, sizeof(struct dc_application_info));
+            dc_application_info_destroy(env, &info);
             info = NULL;
         }
     }
@@ -216,17 +216,16 @@ int dc_application_run(const struct dc_posix_env       *env,
                        struct dc_error                 *err,
                        struct dc_application_info      *info,
                        struct dc_application_lifecycle *(*create_lifecycle_func)(const struct dc_posix_env *env, struct dc_error *err),
+                       void (*destroy_lifecycle_func)(const struct dc_posix_env *env, struct dc_application_lifecycle **plifecycle),
                        const char                      *default_config_path,
                        int                              argc,
                        char                            *argv[])
 {
-    int from_state;
-    int to_state;
     int ret_val;
 
     DC_TRACE(env);
-    info->lifecycle = create_lifecycle_func(env, err);
     ret_val = -1;
+    info->lifecycle = create_lifecycle_func(env, err);
 
     if(DC_HAS_NO_ERROR(err))
     {
@@ -280,14 +279,16 @@ int dc_application_run(const struct dc_posix_env       *env,
 
             if(DC_HAS_NO_ERROR(err))
             {
+                int from_state;
+                int to_state;
+
                 ret_val = dc_fsm_run(env, err, fsm_info, &from_state, &to_state, info, transitions);
+                dc_fsm_info_destroy(env, &fsm_info);
             }
-
-            dc_fsm_info_destroy(env, &fsm_info);
         }
-    }
 
-    dc_application_lifecycle_destroy(env, &info->lifecycle);
+        destroy_lifecycle_func(env, &info->lifecycle);
+    }
 
     return ret_val;
 }
