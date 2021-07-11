@@ -19,7 +19,7 @@
 #include <dc_util/path.h>
 #include <dc_posix/stdlib.h>
 #include <dc_posix/string.h>
-//#include <dc_posix/regex.h>
+#include <dc_posix/regex.h>
 
 
 #pragma GCC diagnostic push
