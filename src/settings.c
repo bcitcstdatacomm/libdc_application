@@ -19,8 +19,7 @@
 #include <dc_util/path.h>
 #include <dc_posix/stdlib.h>
 #include <dc_posix/string.h>
-#include <regex.h>
-#include <stdio.h>
+//#include <dc_posix/regex.h>
 
 
 #pragma GCC diagnostic push
@@ -203,9 +202,9 @@ struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env,
 
     if(DC_HAS_NO_ERROR(err))
     {
-        int result = regcomp(&setting->regex, pattern, REG_EXTENDED);
+        int result = dc_regcomp(env, err, &setting->regex, pattern, REG_EXTENDED);
 
-        if(result == 0)
+        if(DC_HAS_ERROR(err))
         {
             setting->parent.type = DC_SETTING_NONE;
             setting->pattern     = pattern;
@@ -226,7 +225,7 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
 
     DC_TRACE(env);
     setting = *psetting;
-    regfree(&setting->regex);
+    dc_regfree(env, &setting->regex);
     dc_free(env, setting, sizeof(struct dc_setting_path));
 
     if(env->null_free)
@@ -246,43 +245,17 @@ bool dc_setting_regex_set(const struct dc_posix_env *env, struct dc_error *err, 
     {
         int match;
 
-        match = regexec(&setting->regex, value, 0, NULL, 0);
+        match = dc_regexec(env, err, &setting->regex, value, 0, NULL, 0);
 
-        if(match == 0)
+        if(DC_HAS_ERROR(err))
         {
-            setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1) * sizeof(char));
+            setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1));
 
             if(DC_HAS_NO_ERROR(err))
             {
                 dc_strcpy(env, setting->string, value);
                 setting->parent.type = type;
                 ret_val = true;
-            }
-        }
-        else
-        {
-            static const char   *msg_format = "Bad string: %s, must match %s";
-            static const size_t  msg_format_length = 25;
-            size_t               msg_length;
-            struct dc_error      local_err;
-            char                *msg;
-
-            msg_length = msg_format_length + dc_strlen(env, setting->pattern) + dc_strlen(env, value) + 1;
-            dc_error_init(&local_err);
-            msg = dc_malloc(env, &local_err, msg_length * sizeof(char));
-
-            if(DC_HAS_NO_ERROR(&local_err))
-            {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-                sprintf(msg, msg_format, value, setting->pattern);
-#pragma GCC diagnostic pop
-                DC_REPORT_USER(env, err, msg, match);
-                dc_free(env, msg, msg_length * sizeof(char));
-            }
-            else
-            {
-                DC_REPORT_SYSTEM(env, err, "Out of memory", ENOMEM);
             }
         }
     }
