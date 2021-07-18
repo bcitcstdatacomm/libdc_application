@@ -16,10 +16,10 @@
 
 
 #include "settings.h"
-#include <dc_util/path.h>
+#include <dc_posix/regex.h>
 #include <dc_posix/stdlib.h>
 #include <dc_posix/string.h>
-#include <dc_posix/regex.h>
+#include <dc_util/path.h>
 
 
 #pragma GCC diagnostic push
@@ -28,7 +28,7 @@ struct dc_setting_string
 {
     struct dc_setting parent;
     char *string;
-};
+} __attribute__((aligned(16)));
 
 struct dc_setting_regex
 {
@@ -36,25 +36,25 @@ struct dc_setting_regex
     const char *pattern;
     regex_t regex;
     char *string;
-};
+} __attribute__((aligned(64)));
 
 struct dc_setting_path
 {
     struct dc_setting parent;
     char *path;
-};
+} __attribute__((aligned(16)));
 
 struct dc_setting_bool
 {
     struct dc_setting parent;
     bool value;
-};
+} __attribute__((aligned(8)));
 
 struct dc_setting_uint16
 {
     struct dc_setting parent;
     uint16_t value;
-};
+} __attribute__((aligned(8)));
 #pragma GCC diagnostic pop
 
 bool dc_setting_is_set(const struct dc_posix_env *env, struct dc_setting *setting)

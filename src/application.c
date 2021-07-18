@@ -53,7 +53,7 @@ struct dc_application_lifecycle
     int (*run)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
     int (*cleanup)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
     int (*destroy_settings)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings **);
-};
+} __attribute__((aligned(64)));
 
 
 #pragma GCC diagnostic push
@@ -67,7 +67,7 @@ struct dc_application_info
     int argc;
     char *default_config_path;
     char **argv;
-};
+} __attribute__((aligned(64)));
 #pragma GCC diagnostic pop
 
 
@@ -275,7 +275,7 @@ int dc_application_run(const struct dc_posix_env       *env,
                             { DC_FSM_IGNORE,            DC_FSM_IGNORE,            NULL                     },
                     };
 
-            fsm_info = dc_fsm_info_create(env, err, info->name, info->verbose_file);
+            fsm_info = dc_fsm_info_create(env, err, info->name);
 
             if(DC_HAS_NO_ERROR(err))
             {
