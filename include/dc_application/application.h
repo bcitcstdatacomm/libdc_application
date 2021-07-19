@@ -20,7 +20,7 @@
 
 
 #include "settings.h"
-#include <dc_posix/posix_env.h>
+#include <dc_posix/dc_posix_env.h>
 #include <stdio.h>
 
 

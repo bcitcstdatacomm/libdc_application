@@ -16,7 +16,7 @@
 
 
 #include "options.h"
-#include <dc_posix/stdlib.h>
+#include <dc_posix/dc_stdlib.h>
 #include <dc_util/types.h>
 
 
@@ -77,11 +77,11 @@ const void *dc_uint16_from_string(const struct dc_posix_env *env, struct dc_erro
     DC_TRACE(env);
     value = dc_malloc(env, err, sizeof(uint16_t));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         *value = dc_uint16_from_str(env, err, str, 10);
 
-        if(DC_HAS_ERROR(err))
+        if(dc_error_has_error(err))
         {
             dc_free(env, value, sizeof(uint16_t));
             value = NULL;

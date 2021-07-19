@@ -17,8 +17,8 @@
 
 #include "application.h"
 #include <dc_fsm/fsm.h>
-#include <dc_posix/stdlib.h>
-#include <dc_posix/string.h>
+#include <dc_posix/dc_stdlib.h>
+#include <dc_posix/dc_string.h>
 
 
 extern char **environ;
@@ -103,7 +103,7 @@ struct dc_application_lifecycle *dc_application_lifecycle_create(const struct dc
     DC_TRACE(env);
     lifecycle = dc_calloc(env, err, 1, sizeof(struct dc_application_lifecycle));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         lifecycle->create_settings  = create_settings_func;
         lifecycle->run              = run_func;
@@ -161,12 +161,12 @@ struct dc_application_info *dc_application_info_create(const struct dc_posix_env
     DC_TRACE(env);
     info = dc_calloc(env, err, 1, sizeof(struct dc_application_info));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         info->verbose_file = verbose_file;
         info->name         = dc_malloc(env, err, dc_strlen(env, name) + 1);
 
-        if(DC_HAS_NO_ERROR(err))
+        if(dc_error_has_no_error(err))
         {
             dc_strcpy(env, info->name, name);
         }
@@ -227,7 +227,7 @@ int dc_application_run(const struct dc_posix_env       *env,
     ret_val = -1;
     info->lifecycle = create_lifecycle_func(env, err);
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         info->argc = argc;
         info->argv = argv;
@@ -236,13 +236,13 @@ int dc_application_run(const struct dc_posix_env       *env,
         {
             info->default_config_path = dc_malloc(env, err, dc_strlen(env, default_config_path) + 1);
 
-            if(DC_HAS_NO_ERROR(err))
+            if(dc_error_has_no_error(err))
             {
                 dc_strcpy(env, info->default_config_path, default_config_path);
             }
         }
 
-        if(DC_HAS_NO_ERROR(err))
+        if(dc_error_has_no_error(err))
         {
             struct dc_fsm_info *fsm_info;
             static struct dc_fsm_transition transitions[] =
@@ -277,7 +277,7 @@ int dc_application_run(const struct dc_posix_env       *env,
 
             fsm_info = dc_fsm_info_create(env, err, info->name);
 
-            if(DC_HAS_NO_ERROR(err))
+            if(dc_error_has_no_error(err))
             {
                 int from_state;
                 int to_state;
@@ -306,7 +306,7 @@ static int create_settings(const struct dc_posix_env *env, struct dc_error *err,
     {
         info->settings = info->lifecycle->create_settings(env, err);
 
-        if(DC_HAS_ERROR(err))
+        if(dc_error_has_error(err))
         {
             ret_val = -1;
         }
@@ -394,7 +394,7 @@ static int read_config(const struct dc_posix_env *env, struct dc_error *err, voi
         // this will not overwrite if it was set earlier, no need for an "if" to check if it was set already
         dc_setting_path_set(env, err, info->settings->config_path, info->default_config_path, DC_SETTING_NONE);
 
-        if(DC_HAS_NO_ERROR(err))
+        if(dc_error_has_no_error(err))
         {
             ret_val = info->lifecycle->read_config(env, err, info->settings);
         }

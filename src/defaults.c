@@ -36,7 +36,7 @@ int dc_default_set_defaults(const struct dc_posix_env *env, __attribute__((unuse
         {
             opt->setting_func(env, err, opt->setting, opt->default_value, DC_SETTING_DEFAULT);
 
-            if(DC_HAS_ERROR(err))
+            if(dc_error_has_error(err))
             {
                 // TODO: now what?
             }

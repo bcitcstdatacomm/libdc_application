@@ -17,8 +17,8 @@
 
 #include "environment.h"
 #include "options.h"
-#include <dc_posix/stdlib.h>
-#include <dc_posix/string.h>
+#include <dc_posix/dc_stdlib.h>
+#include <dc_posix/dc_string.h>
 
 
 static bool set_from_env(const struct dc_posix_env *env,
@@ -50,7 +50,7 @@ int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_error *er
             length  = dc_strlen(env, *envvars) + 1;
             env_var = dc_malloc(env, err, length * sizeof(char));
 
-            if(DC_HAS_NO_ERROR(err))
+            if(dc_error_has_no_error(err))
             {
                 char *rest;
                 char *key;

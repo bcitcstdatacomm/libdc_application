@@ -17,7 +17,7 @@
 
 #include "config.h"
 #include "options.h"
-#include <dc_posix/stdlib.h>
+#include <dc_posix/dc_stdlib.h>
 
 
 int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_application_settings *settings)
@@ -66,12 +66,12 @@ int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused
                 {
                     value = opt->read_from_config(env, err, item);
 
-                    if(DC_HAS_NO_ERROR(err))
+                    if(dc_error_has_no_error(err))
                     {
                         opt->setting_func(env, err, opt->setting, value, DC_SETTING_CONFIG);
                     }
 
-                    if(DC_HAS_ERROR(err))
+                    if(dc_error_has_error(err))
                     {
                         // TODO: now what?
                     }
@@ -124,7 +124,7 @@ const void *dc_uint16_from_config(const struct dc_posix_env *env, struct dc_erro
 
     value = dc_malloc(env, err, sizeof(uint16_t));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         *value = (uint16_t)config_value;
     }

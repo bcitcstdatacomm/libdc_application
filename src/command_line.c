@@ -17,7 +17,7 @@
 
 #include "command_line.h"
 #include "options.h"
-#include <dc_posix/stdlib.h>
+#include <dc_posix/dc_stdlib.h>
 #include <getopt.h>
 
 
@@ -38,7 +38,7 @@ int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_erro
 
     long_options = dc_calloc(env, err, count + 1, sizeof(struct option));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         for(size_t i = 0; i < count; i++)
         {
@@ -67,12 +67,12 @@ int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_erro
             opt   = &opt_settings->opts[option_index];
             value = opt->read_from_string(env, err, optarg);
 
-            if(DC_HAS_NO_ERROR(err))
+            if(dc_error_has_no_error(err))
             {
                 opt->setting_func(env, err, opt->setting, value, DC_SETTING_COMMAND_LINE);
             }
 
-            if(DC_HAS_ERROR(err))
+            if(dc_error_has_error(err))
             {
                 // TODO: now what?
             }

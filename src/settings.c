@@ -16,9 +16,9 @@
 
 
 #include "settings.h"
-#include <dc_posix/regex.h>
-#include <dc_posix/stdlib.h>
-#include <dc_posix/string.h>
+#include <dc_posix/dc_regex.h>
+#include <dc_posix/dc_stdlib.h>
+#include <dc_posix/dc_string.h>
 #include <dc_util/path.h>
 
 
@@ -71,7 +71,7 @@ struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env, s
     DC_TRACE(env);
     setting = dc_malloc(env, err, sizeof(struct dc_setting_path));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         setting->parent.type = DC_SETTING_NONE;
         setting->path        = NULL;
@@ -114,7 +114,7 @@ bool dc_setting_path_set(const struct dc_posix_env *env, struct dc_error *err, s
     {
         expand_path(env, err, &setting->path, value);
 
-        if(DC_HAS_NO_ERROR(err))
+        if(dc_error_has_no_error(err))
         {
             setting->parent.type = type;
             ret_val = true;
@@ -138,7 +138,7 @@ struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *en
     DC_TRACE(env);
     setting = dc_malloc(env, err, sizeof(struct dc_setting_string));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         setting->parent.type = DC_SETTING_NONE;
         setting->string      = NULL;
@@ -175,7 +175,7 @@ bool dc_setting_string_set(const struct dc_posix_env *env, struct dc_error *err,
     {
         setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1) * sizeof(char));
 
-        if(DC_HAS_NO_ERROR(err))
+        if(dc_error_has_no_error(err))
         {
             dc_strcpy(env, setting->string, value);
             setting->parent.type = type;
@@ -200,11 +200,11 @@ struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env,
     DC_TRACE(env);
     setting = dc_malloc(env, err, sizeof(struct dc_setting_regex));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         int result = dc_regcomp(env, err, &setting->regex, pattern, REG_EXTENDED);
 
-        if(DC_HAS_ERROR(err))
+        if(dc_error_has_error(err))
         {
             setting->parent.type = DC_SETTING_NONE;
             setting->pattern     = pattern;
@@ -212,7 +212,7 @@ struct dc_setting_regex *dc_setting_regex_create(const struct dc_posix_env *env,
         }
         else
         {
-            DC_REPORT_USER(env, err, "XXX", result);
+            DC_ERROR_RAISE_USER(err, "XXX", result);
         }
     }
 
@@ -247,11 +247,11 @@ bool dc_setting_regex_set(const struct dc_posix_env *env, struct dc_error *err, 
 
         match = dc_regexec(env, err, &setting->regex, value, 0, NULL, 0);
 
-        if(DC_HAS_ERROR(err))
+        if(dc_error_has_error(err))
         {
             setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1));
 
-            if(DC_HAS_NO_ERROR(err))
+            if(dc_error_has_no_error(err))
             {
                 dc_strcpy(env, setting->string, value);
                 setting->parent.type = type;
@@ -277,7 +277,7 @@ struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env, s
     DC_TRACE(env);
     setting = dc_malloc(env, err, sizeof(struct dc_setting_bool));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         setting->parent.type = DC_SETTING_NONE;
         setting->value       = false;
@@ -331,7 +331,7 @@ struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *en
     DC_TRACE(env);
     setting = dc_malloc(env, err, sizeof(struct dc_setting_uint16));
 
-    if(DC_HAS_NO_ERROR(err))
+    if(dc_error_has_no_error(err))
     {
         setting->parent.type = DC_SETTING_NONE;
         setting->value       = 0;
