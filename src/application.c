@@ -21,6 +21,7 @@
 #include <dc_posix/dc_string.h>
 
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 extern char **environ;
 
 
