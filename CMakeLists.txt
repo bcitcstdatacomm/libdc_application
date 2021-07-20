@@ -10,6 +10,26 @@ project(
         DESCRIPTION ""
         LANGUAGES C)
 
+set(HEADER_LIST
+        "${libdc_application_SOURCE_DIR}/include/dc_application/application.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/settings.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/command_line.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/config.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/defaults.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/environment.h"
+        "${libdc_application_SOURCE_DIR}/include/dc_application/options.h"
+        )
+
+set(SOURCE_LIST
+        "${libdc_application_SOURCE_DIR}/src/application.c"
+        "${libdc_application_SOURCE_DIR}/src/settings.c"
+        "${libdc_application_SOURCE_DIR}/src/command_line.c"
+        "${libdc_application_SOURCE_DIR}/src/config.c"
+        "${libdc_application_SOURCE_DIR}/src/defaults.c"
+        "${libdc_application_SOURCE_DIR}/src/environment.c"
+        "${libdc_application_SOURCE_DIR}/src/options.c"
+        )
+
 ### Require out-of-source builds
 # this still creates a CMakeFiles directory and CMakeCache.txt- can we delete them?
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)

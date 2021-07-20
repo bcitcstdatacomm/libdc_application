@@ -1,7 +1,6 @@
 #ifndef LIBDC_APPLICATION_DEFAULTS_H
 #define LIBDC_APPLICATION_DEFAULTS_H
 
-
 /*
  * Copyright 2021-2021 D'Arcy Smith.
  *
@@ -18,12 +17,11 @@
  * limitations under the License.
  */
 
-
 #include "application.h"
 #include <dc_posix/dc_posix_env.h>
 
-
-int dc_default_set_defaults(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings);
-
+int dc_default_set_defaults(const struct dc_posix_env *env,
+                            struct dc_error *err,
+                            struct dc_application_settings *settings);
 
 #endif // LIBDC_APPLICATION_DEFAULTS_H

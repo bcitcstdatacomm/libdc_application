@@ -14,31 +14,42 @@
  * limitations under the License.
  */
 
-
 #include "options.h"
 #include <dc_posix/dc_stdlib.h>
 #include <dc_util/types.h>
 
-
-void dc_options_set_string(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_string(const struct dc_posix_env *env,
+                           struct dc_error *          err,
+                           struct dc_setting *        setting,
+                           const void *               value,
+                           dc_setting_type            type)
 {
     dc_setting_string_set(env, err, (struct dc_setting_string *)setting, (const char *)value, type);
 }
 
-
-void dc_options_set_regex(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_regex(const struct dc_posix_env *env,
+                          struct dc_error *          err,
+                          struct dc_setting *        setting,
+                          const void *               value,
+                          dc_setting_type            type)
 {
     dc_setting_regex_set(env, err, (struct dc_setting_regex *)setting, (const char *)value, type);
 }
 
-
-void dc_options_set_path(const struct dc_posix_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_path(const struct dc_posix_env *env,
+                         struct dc_error *          err,
+                         struct dc_setting *        setting,
+                         const void *               value,
+                         dc_setting_type            type)
 {
     dc_setting_path_set(env, err, (struct dc_setting_path *)setting, (const char *)value, type);
 }
 
-
-void dc_options_set_bool(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_bool(const struct dc_posix_env *              env,
+                         __attribute__((unused)) struct dc_error *err,
+                         struct dc_setting *                      setting,
+                         const void *                             value,
+                         dc_setting_type                          type)
 {
     const bool *pbool;
 
@@ -46,7 +57,11 @@ void dc_options_set_bool(const struct dc_posix_env *env, __attribute__((unused))
     dc_setting_bool_set(env, (struct dc_setting_bool *)setting, *pbool, type);
 }
 
-void dc_options_set_uint16(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type)
+void dc_options_set_uint16(const struct dc_posix_env *              env,
+                           __attribute__((unused)) struct dc_error *err,
+                           struct dc_setting *                      setting,
+                           const void *                             value,
+                           dc_setting_type                          type)
 {
     const uint16_t *punit16;
 
@@ -54,14 +69,17 @@ void dc_options_set_uint16(const struct dc_posix_env *env, __attribute__((unused
     dc_setting_uint16_set(env, (struct dc_setting_uint16 *)setting, *punit16, type);
 }
 
-const void *dc_string_from_string(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, const char *str)
+const void *
+dc_string_from_string(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, const char *str)
 {
     DC_TRACE(env);
 
     return str;
 }
 
-const void *dc_flag_from_string(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, __attribute__((unused))  const char *str)
+const void *dc_flag_from_string(const struct dc_posix_env *              env,
+                                __attribute__((unused)) struct dc_error *err,
+                                __attribute__((unused)) const char *     str)
 {
     static bool value = true;
 

@@ -1,7 +1,6 @@
 #ifndef LIBDC_APPLICATION_COMMAND_LINE_H
 #define LIBDC_APPLICATION_COMMAND_LINE_H
 
-
 /*
  * Copyright 2021-2021 D'Arcy Smith.
  *
@@ -18,12 +17,12 @@
  * limitations under the License.
  */
 
-
 #include "application.h"
 #include <dc_posix/dc_posix_env.h>
 
-
-int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings, int argc, char *argv[]);
-
+int dc_default_parse_command_line(const struct dc_posix_env *env,
+                                  struct dc_error *err,
+                                  struct dc_application_settings *settings,
+                                  int argc, char *argv[]);
 
 #endif // LIBDC_APPLICATION_COMMAND_LINE_H

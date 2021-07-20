@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-
 #include "command_line.h"
 #include "options.h"
 #include <dc_posix/dc_stdlib.h>
 #include <getopt.h>
 
-
-int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings, int argc, char *argv[])
+int dc_default_parse_command_line(const struct dc_posix_env *     env,
+                                  struct dc_error *               err,
+                                  struct dc_application_settings *settings,
+                                  int                             argc,
+                                  char *                          argv[])
 {
     struct dc_opt_settings *opt_settings;
     size_t                  count;
-    struct option          *long_options;
+    struct option *         long_options;
 
     DC_TRACE(env);
     opt_settings = (struct dc_opt_settings *)settings;
@@ -52,12 +54,11 @@ int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_erro
         {
             int             c;
             int             option_index;
-            const void     *value;
+            const void *    value;
             struct options *opt;
 
             option_index = 0;
-            c = getopt_long(argc, (char **)argv, opt_settings->flags,
-                            long_options, &option_index);
+            c            = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, &option_index);
 
             if(c == -1)
             {
@@ -83,6 +84,3 @@ int dc_default_parse_command_line(const struct dc_posix_env *env, struct dc_erro
 
     return 0;
 }
-
-
-

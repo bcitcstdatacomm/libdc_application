@@ -1,7 +1,6 @@
 #ifndef LIBDC_APPLICATION_CONFIG_H
 #define LIBDC_APPLICATION_CONFIG_H
 
-
 /*
  * Copyright 2021-2021 D'Arcy Smith.
  *
@@ -18,7 +17,6 @@
  * limitations under the License.
  */
 
-
 #include "application.h"
 #include <dc_posix/dc_posix_env.h>
 #pragma GCC diagnostic push
@@ -26,12 +24,13 @@
 #include <libconfig.h>
 #pragma GCC diagnostic pop
 
-
-int dc_default_load_config(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings);
-const void *dc_string_from_config(const struct dc_posix_env *env, struct dc_error *err, config_setting_t *item);
-const void *dc_flag_from_config(const struct dc_posix_env *env, struct dc_error *err, config_setting_t *item);
-const void *dc_uint16_from_config(const struct dc_posix_env *env, struct dc_error *err, config_setting_t *item);
-
-
+int dc_default_load_config(const struct dc_posix_env *env, struct dc_error *err,
+                           struct dc_application_settings *settings);
+const void *dc_string_from_config(const struct dc_posix_env *env,
+                                  struct dc_error *err, config_setting_t *item);
+const void *dc_flag_from_config(const struct dc_posix_env *env,
+                                struct dc_error *err, config_setting_t *item);
+const void *dc_uint16_from_config(const struct dc_posix_env *env,
+                                  struct dc_error *err, config_setting_t *item);
 
 #endif // LIBDC_APPLICATION_CONFIG_H

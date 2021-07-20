@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-
 #include "environment.h"
 #include "options.h"
 #include <dc_posix/dc_stdlib.h>
 #include <dc_posix/dc_string.h>
 
-
 static bool set_from_env(const struct dc_posix_env *env,
-                         struct dc_error *err,
-                         struct dc_opt_settings *settings,
-                         size_t prefix_len,
-                         const char *key,
-                         const char *value);
+                         struct dc_error *          err,
+                         struct dc_opt_settings *   settings,
+                         size_t                     prefix_len,
+                         const char *               key,
+                         const char *               value);
 
-
-int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings, char **envvars)
+int         dc_default_read_env_vars(const struct dc_posix_env *     env,
+                                     struct dc_error *               err,
+                                     struct dc_application_settings *settings,
+                                     char **                         envvars)
 {
     struct dc_opt_settings *opt_settings;
-    const char             *prefix;
+    const char *            prefix;
     size_t                  prefix_len;
 
     DC_TRACE(env);
@@ -44,8 +44,8 @@ int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_error *er
     {
         if(dc_strncmp(env, *envvars, prefix, prefix_len) == 0)
         {
-            size_t  length;
-            char   *env_var;
+            size_t length;
+            char * env_var;
 
             length  = dc_strlen(env, *envvars) + 1;
             env_var = dc_malloc(env, err, length * sizeof(char));
@@ -79,18 +79,18 @@ int dc_default_read_env_vars(const struct dc_posix_env *env, struct dc_error *er
 }
 
 static bool set_from_env(const struct dc_posix_env *env,
-                         struct dc_error           *err,
-                         struct dc_opt_settings    *settings,
+                         struct dc_error *          err,
+                         struct dc_opt_settings *   settings,
                          size_t                     prefix_len,
-                         const char                *env_key,
-                         const char                *env_value)
+                         const char *               env_key,
+                         const char *               env_value)
 {
     const char *sub_key;
     bool        found;
 
     DC_TRACE(env);
     sub_key = &env_key[prefix_len];
-    found = false;
+    found   = false;
 
     for(size_t i = 0; settings->opts[i].name != NULL; i++)
     {

@@ -1,26 +1,6 @@
 # Note that headers are optional, and do not affect add_library, but they will not
 # show up in IDEs unless they are listed in add_library.
 
-set(HEADER_LIST
-        "${libdc_application_SOURCE_DIR}/include/dc_application/application.h"
-        "${libdc_application_SOURCE_DIR}/include/dc_application/settings.h"
-        "${libdc_application_SOURCE_DIR}/include/dc_application/command_line.h"
-        "${libdc_application_SOURCE_DIR}/include/dc_application/config.h"
-        "${libdc_application_SOURCE_DIR}/include/dc_application/defaults.h"
-        "${libdc_application_SOURCE_DIR}/include/dc_application/environment.h"
-        "${libdc_application_SOURCE_DIR}/include/dc_application/options.h"
-)
-
-set(SOURCE_LIST
-        "application.c"
-        "settings.c"
-        "command_line.c"
-        "config.c"
-        "defaults.c"
-        "environment.c"
-        "options.c"
-)
-
 add_definitions( -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 )
 
 if(APPLE)
@@ -82,4 +62,11 @@ source_group(
         TREE "${PROJECT_SOURCE_DIR}/include"
         PREFIX "Header Files"
         FILES ${HEADER_LIST}
+)
+add_custom_target(
+        format
+        COMMAND clang-format
+        -i
+        ${HEADER_LIST}
+        ${SOURCE_LIST}
 )

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-
 #include "config.h"
 #include "options.h"
 #include <dc_posix/dc_stdlib.h>
 
-
-int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, struct dc_application_settings *settings)
+int dc_default_load_config(const struct dc_posix_env *              env,
+                           __attribute__((unused)) struct dc_error *err,
+                           struct dc_application_settings *         settings)
 {
     const char *config_path;
     config_t    config;
 
     DC_TRACE(env);
-    config_path  = dc_setting_path_get(env, settings->config_path);
+    config_path = dc_setting_path_get(env, settings->config_path);
 
     config_init(&config);
 
@@ -36,8 +36,11 @@ int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused
         if(dc_setting_is_set(env, (struct dc_setting *)settings->config_path))
         {
             // TODO: this should be an error somehow - time to figure that out!
-            fprintf(stderr, "%s:%d - %s\n", config_error_file(&config),
-                    config_error_line(&config), config_error_text(&config));
+            fprintf(stderr,
+                    "%s:%d - %s\n",
+                    config_error_file(&config),
+                    config_error_line(&config),
+                    config_error_text(&config));
             config_destroy(&config);
 
             return -1;
@@ -58,9 +61,9 @@ int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused
             if(opt->config_key)
             {
                 config_setting_t *item;
-                const void *value;
+                const void *      value;
 
-                item  = config_lookup(&config, opt->config_key);
+                item = config_lookup(&config, opt->config_key);
 
                 if(item != NULL)
                 {
@@ -85,18 +88,22 @@ int dc_default_load_config(const struct dc_posix_env *env, __attribute__((unused
     return 0;
 }
 
-const void *dc_string_from_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, config_setting_t *item)
+const void *dc_string_from_config(const struct dc_posix_env *              env,
+                                  __attribute__((unused)) struct dc_error *err,
+                                  config_setting_t *                       item)
 {
     DC_TRACE(env);
 
     return item->value.sval;
 }
 
-const void *dc_flag_from_config(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, config_setting_t *item)
+const void *dc_flag_from_config(const struct dc_posix_env *              env,
+                                __attribute__((unused)) struct dc_error *err,
+                                config_setting_t *                       item)
 {
     static bool true_value  = true;
     static bool false_value = false;
-    int value;
+    int         value;
 
     DC_TRACE(env);
     value = item->value.ival;
