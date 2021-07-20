@@ -19,37 +19,37 @@
 #include <dc_util/types.h>
 
 void dc_options_set_string(const struct dc_posix_env *env,
-                           struct dc_error *          err,
-                           struct dc_setting *        setting,
-                           const void *               value,
-                           dc_setting_type            type)
+                           struct dc_error *err,
+                           struct dc_setting *setting,
+                           const void *value,
+                           dc_setting_type type)
 {
     dc_setting_string_set(env, err, (struct dc_setting_string *)setting, (const char *)value, type);
 }
 
 void dc_options_set_regex(const struct dc_posix_env *env,
-                          struct dc_error *          err,
-                          struct dc_setting *        setting,
-                          const void *               value,
-                          dc_setting_type            type)
+                          struct dc_error *err,
+                          struct dc_setting *setting,
+                          const void *value,
+                          dc_setting_type type)
 {
     dc_setting_regex_set(env, err, (struct dc_setting_regex *)setting, (const char *)value, type);
 }
 
 void dc_options_set_path(const struct dc_posix_env *env,
-                         struct dc_error *          err,
-                         struct dc_setting *        setting,
-                         const void *               value,
-                         dc_setting_type            type)
+                         struct dc_error *err,
+                         struct dc_setting *setting,
+                         const void *value,
+                         dc_setting_type type)
 {
     dc_setting_path_set(env, err, (struct dc_setting_path *)setting, (const char *)value, type);
 }
 
-void dc_options_set_bool(const struct dc_posix_env *              env,
+void dc_options_set_bool(const struct dc_posix_env *env,
                          __attribute__((unused)) struct dc_error *err,
-                         struct dc_setting *                      setting,
-                         const void *                             value,
-                         dc_setting_type                          type)
+                         struct dc_setting *setting,
+                         const void *value,
+                         dc_setting_type type)
 {
     const bool *pbool;
 
@@ -57,11 +57,11 @@ void dc_options_set_bool(const struct dc_posix_env *              env,
     dc_setting_bool_set(env, (struct dc_setting_bool *)setting, *pbool, type);
 }
 
-void dc_options_set_uint16(const struct dc_posix_env *              env,
+void dc_options_set_uint16(const struct dc_posix_env *env,
                            __attribute__((unused)) struct dc_error *err,
-                           struct dc_setting *                      setting,
-                           const void *                             value,
-                           dc_setting_type                          type)
+                           struct dc_setting *setting,
+                           const void *value,
+                           dc_setting_type type)
 {
     const uint16_t *punit16;
 
@@ -77,9 +77,9 @@ dc_string_from_string(const struct dc_posix_env *env, __attribute__((unused)) st
     return str;
 }
 
-const void *dc_flag_from_string(const struct dc_posix_env *              env,
+const void *dc_flag_from_string(const struct dc_posix_env *env,
                                 __attribute__((unused)) struct dc_error *err,
-                                __attribute__((unused)) const char *     str)
+                                __attribute__((unused)) const char *str)
 {
     static bool value = true;
 

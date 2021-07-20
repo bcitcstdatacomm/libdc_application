@@ -24,16 +24,18 @@
 // TODO: move these to the .c file and change the arguments to the functins
 // on create set it to NONE and after that chnage it to SET and get rid of all
 // toe other values. Really it can be a bool - it is either set or it is not.
-typedef enum {
-  DC_SETTING_NONE = -1,
-  DC_SETTING_DEFAULT,
-  DC_SETTING_COMMAND_LINE,
-  DC_SETTING_ENVIRONMENT,
-  DC_SETTING_CONFIG,
+typedef enum
+{
+    DC_SETTING_NONE = -1,
+    DC_SETTING_DEFAULT,
+    DC_SETTING_COMMAND_LINE,
+    DC_SETTING_ENVIRONMENT,
+    DC_SETTING_CONFIG,
 } dc_setting_type;
 
-struct dc_setting {
-  dc_setting_type type;
+struct dc_setting
+{
+    dc_setting_type type;
 };
 
 struct dc_setting_string;

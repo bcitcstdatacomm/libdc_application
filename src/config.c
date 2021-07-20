@@ -18,12 +18,12 @@
 #include "options.h"
 #include <dc_posix/dc_stdlib.h>
 
-int dc_default_load_config(const struct dc_posix_env *              env,
+int dc_default_load_config(const struct dc_posix_env *env,
                            __attribute__((unused)) struct dc_error *err,
-                           struct dc_application_settings *         settings)
+                           struct dc_application_settings *settings)
 {
     const char *config_path;
-    config_t    config;
+    config_t config;
 
     DC_TRACE(env);
     config_path = dc_setting_path_get(env, settings->config_path);
@@ -61,7 +61,7 @@ int dc_default_load_config(const struct dc_posix_env *              env,
             if(opt->config_key)
             {
                 config_setting_t *item;
-                const void *      value;
+                const void *value;
 
                 item = config_lookup(&config, opt->config_key);
 
@@ -88,22 +88,22 @@ int dc_default_load_config(const struct dc_posix_env *              env,
     return 0;
 }
 
-const void *dc_string_from_config(const struct dc_posix_env *              env,
+const void *dc_string_from_config(const struct dc_posix_env *env,
                                   __attribute__((unused)) struct dc_error *err,
-                                  config_setting_t *                       item)
+                                  config_setting_t *item)
 {
     DC_TRACE(env);
 
     return item->value.sval;
 }
 
-const void *dc_flag_from_config(const struct dc_posix_env *              env,
+const void *dc_flag_from_config(const struct dc_posix_env *env,
                                 __attribute__((unused)) struct dc_error *err,
-                                config_setting_t *                       item)
+                                config_setting_t *item)
 {
-    static bool true_value  = true;
+    static bool true_value = true;
     static bool false_value = false;
-    int         value;
+    int value;
 
     DC_TRACE(env);
     value = item->value.ival;
