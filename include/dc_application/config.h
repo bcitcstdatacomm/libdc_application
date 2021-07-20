@@ -19,10 +19,7 @@
 
 #include "application.h"
 #include <dc_posix/dc_posix_env.h>
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpadded"
 #include <libconfig.h>
-#pragma GCC diagnostic pop
 
 int dc_default_load_config(const struct dc_posix_env *env, struct dc_error *err,
                            struct dc_application_settings *settings);

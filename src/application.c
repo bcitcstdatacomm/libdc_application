@@ -57,10 +57,8 @@ struct dc_application_lifecycle
     int (*run)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
     int (*cleanup)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
     int (*destroy_settings)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings **);
-} __attribute__((aligned(64)));
+};
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpadded"
 struct dc_application_info
 {
     char *                           name;
@@ -70,8 +68,7 @@ struct dc_application_info
     int                              argc;
     char *                           default_config_path;
     char **                          argv;
-} __attribute__((aligned(64)));
-#pragma GCC diagnostic pop
+};
 
 enum application_states
 {
