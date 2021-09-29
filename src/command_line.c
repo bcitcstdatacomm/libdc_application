@@ -30,12 +30,10 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
     if(settings)
     {
         struct dc_opt_settings *opt_settings;
-
-        opt_settings = (struct dc_opt_settings *)settings;
-
         size_t count;
         struct option *long_options;
 
+        opt_settings = (struct dc_opt_settings *)settings;
         count = 0;
 
         while(opt_settings->opts[count].setting != NULL)
@@ -49,9 +47,10 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
         {
             for(size_t i = 0; i < count; i++)
             {
+                printf("%d %s %d %c\n", i, opt_settings->opts[i].name, opt_settings->opts[i].required, opt_settings->opts[i].val);
                 long_options[i].name = opt_settings->opts[i].name;
                 long_options[i].has_arg = opt_settings->opts[i].required;
-                long_options[i].flag = 0;
+                long_options[i].flag = NULL;
                 long_options[i].val = opt_settings->opts[i].val;
             }
 
@@ -63,10 +62,12 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
                 struct options *opt;
 
                 option_index = 0;
+                printf("%s\n", opt_settings->flags);
                 c = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, &option_index);
 
                 if(c == -1)
                 {
+                    printf("???\n");
                     break;
                 }
 
