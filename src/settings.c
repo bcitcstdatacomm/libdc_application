@@ -206,17 +206,12 @@ dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err, co
 
     if(dc_error_has_no_error(err))
     {
-        int result = dc_regcomp(env, err, &setting->regex, pattern, REG_EXTENDED);
+        dc_regcomp(env, err, &setting->regex, pattern, REG_EXTENDED);
 
-        if(dc_error_has_error(err))
+        if(dc_error_has_no_error(err))
         {
             setting->parent.type = DC_SETTING_NONE;
             setting->pattern = pattern;
-            setting->string = NULL;
-        }
-        else
-        {
-            DC_ERROR_RAISE_USER(err, "XXX", result);
         }
     }
 
@@ -255,15 +250,22 @@ bool dc_setting_regex_set(const struct dc_posix_env *env,
 
         match = dc_regexec(env, err, &setting->regex, value, 0, NULL, 0);
 
-        if(dc_error_has_error(err))
+        if(dc_error_has_no_error(err))
         {
-            setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1));
-
-            if(dc_error_has_no_error(err))
+            if(match == 0)
             {
-                dc_strcpy(env, setting->string, value);
-                setting->parent.type = type;
-                ret_val = true;
+                setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1));
+
+                if(dc_error_has_no_error(err))
+                {
+                    dc_strcpy(env, setting->string, value);
+                    setting->parent.type = type;
+                    ret_val = true;
+                }
+            }
+            else
+            {
+                // TODO: what do you do if the value doesn't match the regex?s
             }
         }
     }

@@ -32,8 +32,8 @@ static void trace_reporter(const struct dc_posix_env *env,
 
 int main(int argc, char *argv[])
 {
-    dc_posix_tracer tracer;
     dc_error_reporter reporter;
+    dc_posix_tracer tracer;
     struct dc_posix_env env;
     struct dc_error err;
     struct dc_application_info *info;
