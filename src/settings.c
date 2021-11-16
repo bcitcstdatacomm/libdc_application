@@ -153,8 +153,13 @@ void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting
 
     DC_TRACE(env);
     setting = *psetting;
-    length = dc_strlen(env, setting->string);
-    dc_free(env, setting->string, length);
+
+    if(setting->string)
+    {
+        length = dc_strlen(env, setting->string);
+        dc_free(env, setting->string, length);
+    }
+
     dc_free(env, *psetting, sizeof(struct dc_setting_string));
 
     if(env->null_free)
