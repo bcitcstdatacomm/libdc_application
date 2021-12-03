@@ -221,6 +221,7 @@ dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err, co
         {
             setting->parent.type = DC_SETTING_NONE;
             setting->pattern = pattern;
+            setting->string = NULL;
         }
     }
 
