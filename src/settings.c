@@ -149,15 +149,16 @@ struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *en
 void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting_string **psetting)
 {
     struct dc_setting_string *setting;
-    size_t length;
 
     DC_TRACE(env);
     setting = *psetting;
 
     if(setting->string)
     {
-        length = dc_strlen(env, setting->string);
-        dc_free(env, setting->string, length);
+        size_t len;
+
+        len = dc_strlen(env, setting->string);
+        dc_free(env, setting->string, len);
     }
 
     dc_free(env, *psetting, sizeof(struct dc_setting_string));
@@ -181,7 +182,10 @@ bool dc_setting_string_set(const struct dc_posix_env *env,
 
     if(setting->parent.type == DC_SETTING_NONE)
     {
-        setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1) * sizeof(char));
+        size_t len;
+
+        len = dc_strlen(env, value);
+        setting->string = dc_malloc(env, err, (len + 1) * sizeof(char));
 
         if(dc_error_has_no_error(err))
         {
@@ -259,7 +263,10 @@ bool dc_setting_regex_set(const struct dc_posix_env *env,
         {
             if(match == 0)
             {
-                setting->string = dc_malloc(env, err, (dc_strlen(env, value) + 1));
+                size_t len;
+
+                len = dc_strlen(env, value);
+                setting->string = dc_malloc(env, err, (len + 1) * sizeof(char));
 
                 if(dc_error_has_no_error(err))
                 {
@@ -270,7 +277,7 @@ bool dc_setting_regex_set(const struct dc_posix_env *env,
             }
             else
             {
-                // TODO: what do you do if the value doesn't match the regex?s
+                // TODO: what do you do if the value doesn't match the regex
             }
         }
     }
