@@ -233,8 +233,6 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
 
     DC_TRACE(env);
     setting = *psetting;
-    dc_regfree(env, &setting->regex);
-    dc_free(env, setting, sizeof(struct dc_setting_path));
 
     if(setting->string)
     {
@@ -243,6 +241,9 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
         len = dc_strlen(env, setting->string);
         dc_free(env, setting->string, len);
     }
+
+    dc_regfree(env, &setting->regex);
+    dc_free(env, setting, sizeof(struct dc_setting_path));
 
     if(env->null_free)
     {
