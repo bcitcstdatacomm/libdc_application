@@ -236,6 +236,14 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
     dc_regfree(env, &setting->regex);
     dc_free(env, setting, sizeof(struct dc_setting_path));
 
+    if(setting->string)
+    {
+        size_t len;
+
+        len = dc_strlen(env, setting->string);
+        dc_free(env, setting->string, len);
+    }
+
     if(env->null_free)
     {
         *psetting = NULL;
