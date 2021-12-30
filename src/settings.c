@@ -267,28 +267,25 @@ bool dc_setting_regex_set(const struct dc_posix_env *env,
     {
         int match;
 
-        match = dc_regexec(env, err, &setting->regex, value, 0, NULL, 0);
+        match = dc_regexec(env, &setting->regex, value, 0, NULL, 0);
 
-        if(dc_error_has_no_error(err))
+        if(match == 0)
         {
-            if(match == 0)
-            {
-                size_t len;
+            size_t len;
 
-                len = dc_strlen(env, value);
-                setting->string = dc_malloc(env, err, (len + 1) * sizeof(char));
+            len = dc_strlen(env, value);
+            setting->string = dc_malloc(env, err, (len + 1) * sizeof(char));
 
-                if(dc_error_has_no_error(err))
-                {
-                    dc_strcpy(env, setting->string, value);
-                    setting->parent.type = type;
-                    ret_val = true;
-                }
-            }
-            else
+            if(dc_error_has_no_error(err))
             {
-                // TODO: what do you do if the value doesn't match the regex
+                dc_strcpy(env, setting->string, value);
+                setting->parent.type = type;
+                ret_val = true;
             }
+        }
+        else
+        {
+            // TODO: what do you do if the value doesn't match the regex
         }
     }
 
