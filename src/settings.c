@@ -111,7 +111,7 @@ bool dc_setting_path_set(const struct dc_posix_env *env,
 
     if(setting->parent.type == DC_SETTING_NONE)
     {
-        expand_path(env, err, &setting->path, value);
+        dc_expand_path(env, err, &setting->path, value);
 
         if(dc_error_has_no_error(err))
         {
