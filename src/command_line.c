@@ -56,19 +56,25 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
             while(1)
             {
                 int c;
-                int option_index;
                 const void *value;
                 struct options *opt;
 
-                option_index = 0;
-                c = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, &option_index);
+                c = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, NULL);
 
                 if(c == -1)
                 {
                     break;
                 }
 
-                opt = &opt_settings->opts[option_index];
+                for(size_t i = 0; i < count; i++)
+                {
+                    if(opt_settings->opts[i].val == c)
+                    {
+                        opt = &opt_settings->opts[i];
+                        break;
+                    }
+                }
+
                 value = opt->read_from_string(env, err, optarg);
 
                 if(dc_error_has_no_error(err))
