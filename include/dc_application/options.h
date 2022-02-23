@@ -54,6 +54,9 @@ struct dc_opt_settings
     size_t opts_size;
     const char *flags;
     const char *env_prefix;
+    int optind;
+    int argc;
+    char **argv;
 };
 
 void dc_options_set_string(const struct dc_posix_env *env, struct dc_error *err,

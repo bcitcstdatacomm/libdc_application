@@ -88,6 +88,10 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
                 }
             }
 
+            opt_settings->optind = optind;
+            opt_settings->argc = argc;
+            opt_settings->argv = argv;
+
             dc_free(env, long_options, (count + 1) * sizeof(struct option));
         }
     }
