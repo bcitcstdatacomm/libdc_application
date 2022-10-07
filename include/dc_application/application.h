@@ -31,6 +31,8 @@ struct dc_application_settings
 
 /**
  *
+ * @param env
+ * @param err
  * @param create_settings_func
  * @param destroy_settings_func
  * @param run_func
@@ -46,16 +48,20 @@ struct dc_application_lifecycle *dc_application_lifecycle_create(
         int (*run_func)(const struct dc_posix_env *env, struct dc_error *err,
                         struct dc_application_settings *));
 
+
 /**
  *
+ * @param env
  * @param plifecycle
  */
 void dc_application_lifecycle_destroy(
         const struct dc_posix_env *env,
         struct dc_application_lifecycle **plifecycle);
 
+
 /**
  *
+ * @param env
  * @param lifecycle
  * @param func
  */
@@ -64,8 +70,10 @@ void dc_application_lifecycle_set_set_defaults(
         int (*func)(const struct dc_posix_env *env, struct dc_error *err,
                     struct dc_application_settings *settings));
 
+
 /**
  *
+ * @param env
  * @param lifecycle
  * @param func
  */
@@ -76,6 +84,7 @@ void dc_application_lifecycle_set_read_config(
 
 /**
  *
+ * @param env
  * @param lifecycle
  * @param func
  */
@@ -84,8 +93,10 @@ void dc_application_lifecycle_set_read_env_vars(
         int (*func)(const struct dc_posix_env *env, struct dc_error *err,
                     struct dc_application_settings *settings, char **envvars));
 
+
 /**
  *
+ * @param env
  * @param lifecycle
  * @param func
  */
@@ -95,8 +106,10 @@ void dc_application_lifecycle_set_parse_command_line(
                     struct dc_application_settings *settings, int argc,
                     char *argv[]));
 
+
 /**
  *
+ * @param env
  * @param lifecycle
  * @param func
  */
@@ -105,21 +118,26 @@ void dc_application_lifecycle_set_cleanup(
         int (*func)(const struct dc_posix_env *env, struct dc_error *err,
                     struct dc_application_settings *settings));
 
+
 /**
  *
+ * @param env
+ * @param err
  * @param name
- * @param verbose_file
  * @return
  */
 struct dc_application_info *
 dc_application_info_create(const struct dc_posix_env *env, struct dc_error *err, const char *name);
 
+
 /**
  *
+ * @param env
  * @param pinfo
  */
 void dc_application_info_destroy(const struct dc_posix_env *env,
                                  struct dc_application_info **pinfo);
+
 
 /**
  *

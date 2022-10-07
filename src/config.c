@@ -36,7 +36,7 @@ int dc_default_load_config(const struct dc_posix_env *env,
         if(dc_setting_is_set(env, (struct dc_setting *)settings->config_path))
         {
             // TODO: this should be an error somehow - time to figure that out!
-            fprintf(stderr,
+            fprintf(stderr,                     // NOLINT(cert-err33-c)
                     "%s:%d - %s\n",
                     config_error_file(&config),
                     config_error_line(&config),

@@ -19,6 +19,20 @@
 #include <dc_posix/dc_stdlib.h>
 #include <getopt.h>
 
+
+static struct option *create_long_opts(const struct dc_posix_env *env,
+                                       struct dc_error *err,
+                                       const struct dc_opt_settings *opt_settings,
+                                       size_t count);
+static void parse_arguments(const struct dc_posix_env *env,
+                            struct dc_error *err,
+                            int argc,
+                            char *argv[],
+                            const struct dc_opt_settings *opt_settings,
+                            const struct option *long_options,
+                            size_t count);
+
+
 int dc_default_parse_command_line(const struct dc_posix_env *env,
                                   struct dc_error *err,
                                   struct dc_application_settings *settings,
@@ -30,8 +44,8 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
     if(settings)
     {
         struct dc_opt_settings *opt_settings;
-        size_t count;
         struct option *long_options;
+        size_t count;
 
         opt_settings = (struct dc_opt_settings *)settings;
         count = 0;
@@ -41,53 +55,11 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
             count++;
         }
 
-        long_options = dc_calloc(env, err, count + 1, sizeof(struct option));
+        long_options = create_long_opts(env, err, opt_settings, count);
 
         if(dc_error_has_no_error(err))
         {
-            for(size_t i = 0; i < count; i++)
-            {
-                long_options[i].name = opt_settings->opts[i].name;
-                long_options[i].has_arg = opt_settings->opts[i].required;
-                long_options[i].flag = NULL;
-                long_options[i].val = opt_settings->opts[i].val;
-            }
-
-            while(1)
-            {
-                int c;
-                const void *value;
-                struct options *opt;
-
-                c = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, NULL);
-
-                if(c == -1)
-                {
-                    break;
-                }
-
-                for(size_t i = 0; i < count; i++)
-                {
-                    if(opt_settings->opts[i].val == c)
-                    {
-                        opt = &opt_settings->opts[i];
-                        break;
-                    }
-                }
-
-                value = opt->read_from_string(env, err, optarg);
-
-                if(dc_error_has_no_error(err))
-                {
-                    opt->setting_func(env, err, opt->setting, value, DC_SETTING_COMMAND_LINE);
-                }
-
-                if(dc_error_has_error(err))
-                {
-                    // TODO: now what?
-                }
-            }
-
+            parse_arguments(env, err, argc, argv, opt_settings, long_options, count);
             opt_settings->optind = optind;
             opt_settings->argc = argc;
             opt_settings->argv = argv;
@@ -97,4 +69,83 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
     }
 
     return 0;
+}
+
+
+static struct option *create_long_opts(const struct dc_posix_env *env,
+                                       struct dc_error *err,
+                                       const struct dc_opt_settings *opt_settings,
+                                       size_t count)
+{
+    struct option *long_options;
+
+    long_options = dc_calloc(env, err, count + 1, sizeof(struct option));
+
+    if(dc_error_has_no_error(err))
+    {
+        for(size_t i = 0; i < count; i++)
+        {
+            long_options[i].name = opt_settings->opts[i].name;
+            long_options[i].has_arg = opt_settings->opts[i].required;
+            long_options[i].flag = NULL;
+            long_options[i].val = opt_settings->opts[i].val;
+        }
+    }
+
+    return long_options;
+}
+
+
+static void parse_arguments(const struct dc_posix_env *env,
+                            struct dc_error *err,
+                            int argc,
+                            char *argv[],
+                            const struct dc_opt_settings *opt_settings,
+                            const struct option *long_options,
+                            size_t count)
+{
+    while(1)
+    {
+        int c;
+        const void *value;
+        struct options *opt;
+
+        c = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, NULL);
+
+        if(c == -1)
+        {
+            break;
+        }
+
+        opt = NULL;
+
+        for(size_t i = 0; i < count; i++)
+        {
+            if(opt_settings->opts[i].val == c)
+            {
+                opt = &opt_settings->opts[i];
+                break;
+            }
+        }
+
+        if(opt == NULL)
+        {
+            // TODO: fix
+            DC_ERROR_RAISE_USER(err, "", 100);
+        }
+        else
+        {
+            value = opt->read_from_string(env, err, optarg);
+
+            if(dc_error_has_no_error(err))
+            {
+                opt->setting_func(env, err, opt->setting, value, DC_SETTING_COMMAND_LINE);
+            }
+
+            if(dc_error_has_error(err))
+            {
+                // TODO: now what?
+            }
+        }
+    }
 }
