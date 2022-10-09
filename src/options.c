@@ -46,7 +46,7 @@ void dc_options_set_path(const struct dc_posix_env *env,
 }
 
 void dc_options_set_bool(const struct dc_posix_env *env,
-                         __attribute__((unused)) struct dc_error *err,
+                         struct dc_error *err,
                          struct dc_setting *setting,
                          const void *value,
                          dc_setting_type type)
@@ -58,7 +58,7 @@ void dc_options_set_bool(const struct dc_posix_env *env,
 }
 
 void dc_options_set_uint16(const struct dc_posix_env *env,
-                           __attribute__((unused)) struct dc_error *err,
+                           struct dc_error *err,
                            struct dc_setting *setting,
                            const void *value,
                            dc_setting_type type)
@@ -70,7 +70,7 @@ void dc_options_set_uint16(const struct dc_posix_env *env,
 }
 
 const void *
-dc_string_from_string(const struct dc_posix_env *env, __attribute__((unused)) struct dc_error *err, const char *str)
+dc_string_from_string(const struct dc_posix_env *env, struct dc_error *err, const char *str)
 {
     DC_TRACE(env);
 
@@ -78,8 +78,8 @@ dc_string_from_string(const struct dc_posix_env *env, __attribute__((unused)) st
 }
 
 const void *dc_flag_from_string(const struct dc_posix_env *env,
-                                __attribute__((unused)) struct dc_error *err,
-                                __attribute__((unused)) const char *str)
+                                struct dc_error *err,
+                                const char *str)
 {
     static bool value = true;
 

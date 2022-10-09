@@ -18,7 +18,7 @@
 #include "options.h"
 
 int dc_default_set_defaults(const struct dc_posix_env *env,
-                            __attribute__((unused)) struct dc_error *err,
+                            struct dc_error *err,
                             struct dc_application_settings *settings)
 {
     struct dc_opt_settings *opt_settings;

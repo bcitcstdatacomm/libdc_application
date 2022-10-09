@@ -613,8 +613,8 @@ static int destroy_settings(const struct dc_posix_env *env, struct dc_error *err
 }
 
 static int create_settings_error(const struct dc_posix_env *env,
-                                 __attribute__((unused)) struct dc_error *err,
-                                 __attribute__((unused)) void *arg)
+                                 struct dc_error *err,
+                                 void *arg)
 {
     DC_TRACE(env);
 
@@ -622,8 +622,8 @@ static int create_settings_error(const struct dc_posix_env *env,
 }
 
 static int parse_command_line_error(const struct dc_posix_env *env,
-                                    __attribute__((unused)) struct dc_error *err,
-                                    __attribute__((unused)) void *arg)
+                                    struct dc_error *err,
+                                    void *arg)
 {
     DC_TRACE(env);
 
@@ -631,8 +631,8 @@ static int parse_command_line_error(const struct dc_posix_env *env,
 }
 
 static int read_env_vars_error(const struct dc_posix_env *env,
-                               __attribute__((unused)) struct dc_error *err,
-                               __attribute__((unused)) void *arg)
+                               struct dc_error *err,
+                               void *arg)
 {
     DC_TRACE(env);
 
@@ -640,8 +640,8 @@ static int read_env_vars_error(const struct dc_posix_env *env,
 }
 
 static int read_config_error(const struct dc_posix_env *env,
-                             __attribute__((unused)) struct dc_error *err,
-                             __attribute__((unused)) void *arg)
+                             struct dc_error *err,
+                             void *arg)
 {
     DC_TRACE(env);
 
@@ -649,8 +649,8 @@ static int read_config_error(const struct dc_posix_env *env,
 }
 
 static int set_defaults_error(const struct dc_posix_env *env,
-                              __attribute__((unused)) struct dc_error *err,
-                              __attribute__((unused)) void *arg)
+                              struct dc_error *err,
+                              void *arg)
 {
     DC_TRACE(env);
 
@@ -658,8 +658,8 @@ static int set_defaults_error(const struct dc_posix_env *env,
 }
 
 static int run_error(const struct dc_posix_env *env,
-                     __attribute__((unused)) struct dc_error *err,
-                     __attribute__((unused)) void *arg)
+                     struct dc_error *err,
+                     void *arg)
 {
     DC_TRACE(env);
 
@@ -667,8 +667,8 @@ static int run_error(const struct dc_posix_env *env,
 }
 
 static int cleanup_error(const struct dc_posix_env *env,
-                         __attribute__((unused)) struct dc_error *err,
-                         __attribute__((unused)) void *arg)
+                         struct dc_error *err,
+                         void *arg)
 {
     DC_TRACE(env);
 
@@ -676,16 +676,16 @@ static int cleanup_error(const struct dc_posix_env *env,
 }
 
 static int destroy_settings_error(const struct dc_posix_env *env,
-                                  __attribute__((unused)) struct dc_error *err,
-                                  __attribute__((unused)) void *arg)
+                                  struct dc_error *err,
+                                  void *arg)
 {
     DC_TRACE(env);
 
     return DC_FSM_EXIT;
 }
 
-static void will_change_state(__attribute__((unused)) const struct dc_posix_env *env,
-                              __attribute__((unused)) struct dc_error *err,
+static void will_change_state(const struct dc_posix_env *env,
+                              struct dc_error *err,
                               const struct dc_fsm_info *info,
                               int from_state_id,
                               int to_state_id)
@@ -693,8 +693,8 @@ static void will_change_state(__attribute__((unused)) const struct dc_posix_env 
     printf("%s: will change %d -> %d\n", dc_fsm_info_get_name(info), from_state_id, to_state_id);
 }
 
-static void did_change_state(__attribute__((unused)) const struct dc_posix_env *env,
-                             __attribute__((unused)) struct dc_error *err,
+static void did_change_state(const struct dc_posix_env *env,
+                             struct dc_error *err,
                              const struct dc_fsm_info *info,
                              int from_state_id,
                              int to_state_id,
@@ -703,8 +703,8 @@ static void did_change_state(__attribute__((unused)) const struct dc_posix_env *
     printf("%s: did change %d -> %d moving to %d\n", dc_fsm_info_get_name(info), from_state_id, to_state_id, next_id);
 }
 
-static void bad_change_state(__attribute__((unused)) const struct dc_posix_env *env,
-                             __attribute__((unused)) struct dc_error *err,
+static void bad_change_state(const struct dc_posix_env *env,
+                             struct dc_error *err,
                              const struct dc_fsm_info *info,
                              int from_state_id,
                              int to_state_id)

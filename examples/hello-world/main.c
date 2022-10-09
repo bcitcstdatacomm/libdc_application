@@ -55,7 +55,7 @@ static void error_reporter(const struct dc_error *err)
     fprintf(stderr, "ERROR: %s\n", err->message);
 }
 
-static void trace_reporter(__attribute__((unused)) const struct dc_posix_env *env,
+static void trace_reporter(const struct dc_posix_env *env,
                           const char *file_name,
                           const char *function_name,
                           size_t line_number)

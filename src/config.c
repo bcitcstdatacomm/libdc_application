@@ -19,7 +19,7 @@
 #include <dc_posix/dc_stdlib.h>
 
 int dc_default_load_config(const struct dc_posix_env *env,
-                           __attribute__((unused)) struct dc_error *err,
+                           struct dc_error *err,
                            struct dc_application_settings *settings)
 {
     const char *config_path;
@@ -89,7 +89,7 @@ int dc_default_load_config(const struct dc_posix_env *env,
 }
 
 const void *dc_string_from_config(const struct dc_posix_env *env,
-                                  __attribute__((unused)) struct dc_error *err,
+                                  struct dc_error *err,
                                   config_setting_t *item)
 {
     DC_TRACE(env);
@@ -98,7 +98,7 @@ const void *dc_string_from_config(const struct dc_posix_env *env,
 }
 
 const void *dc_flag_from_config(const struct dc_posix_env *env,
-                                __attribute__((unused)) struct dc_error *err,
+                                struct dc_error *err,
                                 config_setting_t *item)
 {
     static bool true_value = true;

@@ -156,9 +156,15 @@ set_target_properties(dc_application PROPERTIES
 
 find_library(LIBDC_ERROR dc_error REQUIRED)
 find_library(LIBDC_POSIX dc_posix REQUIRED)
+find_library(LIBDC_UTIL dc_util REQUIRED)
+find_library(LIBDC_FSM dc_fsm REQUIRED)
+find_library(LIB_CONFIG config REQUIRED)
 
 target_link_libraries(dc_application PUBLIC ${LIBDC_ERROR})
 target_link_libraries(dc_application PUBLIC ${LIBDC_POSIX})
+target_link_libraries(dc_application PUBLIC ${LIBDC_UTIL})
+target_link_libraries(dc_application PUBLIC ${LIBDC_FSM})
+target_link_libraries(dc_application PUBLIC ${LIB_CONFIG})
 
 install(TARGETS dc_application LIBRARY DESTINATION lib)
 install(FILES ${HEADER_LIST} DESTINATION include/dc_application)
