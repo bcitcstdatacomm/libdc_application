@@ -91,11 +91,7 @@ void dc_setting_path_destroy(const struct dc_posix_env *env, struct dc_setting_p
     }
 
     dc_free(env, *psetting, sizeof(struct dc_setting_path));
-
-    if(env->null_free)
-    {
-        *psetting = NULL;
-    }
+    *psetting = NULL;
 }
 
 bool dc_setting_path_set(const struct dc_posix_env *env,
@@ -165,11 +161,7 @@ void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting
     }
 
     dc_free(env, *psetting, sizeof(struct dc_setting_string));
-
-    if(env->null_free)
-    {
-        *psetting = NULL;
-    }
+    *psetting = NULL;
 }
 
 bool dc_setting_string_set(const struct dc_posix_env *env,
@@ -248,11 +240,7 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
 
     dc_regfree(env, &setting->regex);
     dc_free(env, setting, sizeof(struct dc_setting_regex));
-
-    if(env->null_free)
-    {
-        *psetting = NULL;
-    }
+    *psetting = NULL;
 }
 
 bool dc_setting_regex_set(const struct dc_posix_env *env,
@@ -322,11 +310,7 @@ void dc_setting_bool_destroy(const struct dc_posix_env *env, struct dc_setting_b
 {
     DC_TRACE(env);
     dc_free(env, *psetting, sizeof(struct dc_setting_bool));
-
-    if(env->null_free)
-    {
-        *psetting = NULL;
-    }
+    *psetting = NULL;
 }
 
 bool dc_setting_bool_set(const struct dc_posix_env *env,
@@ -379,11 +363,7 @@ void dc_setting_uint16_destroy(const struct dc_posix_env *env, struct dc_setting
 {
     DC_TRACE(env);
     dc_free(env, *psetting, sizeof(struct dc_setting_uint16));
-
-    if(env->null_free)
-    {
-        *psetting = NULL;
-    }
+    *psetting = NULL;
 }
 
 bool dc_setting_uint16_set(const struct dc_posix_env *env,

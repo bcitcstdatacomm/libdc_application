@@ -288,11 +288,7 @@ void dc_application_info_destroy(const struct dc_posix_env *env, struct dc_appli
     }
 
     dc_free(env, *pinfo, sizeof(struct dc_application_info));
-
-    if(env->null_free)
-    {
-        *pinfo = NULL;
-    }
+    *pinfo = NULL;
 }
 
 int dc_application_run(const struct dc_posix_env *env,
