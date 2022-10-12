@@ -608,6 +608,8 @@ static int destroy_settings(const struct dc_posix_env *env, struct dc_error *err
     return ret_val;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int create_settings_error(const struct dc_posix_env *env,
                                  struct dc_error *err,
                                  void *arg)
@@ -616,7 +618,10 @@ static int create_settings_error(const struct dc_posix_env *env,
 
     return DC_FSM_EXIT;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int parse_command_line_error(const struct dc_posix_env *env,
                                     struct dc_error *err,
                                     void *arg)
@@ -625,7 +630,10 @@ static int parse_command_line_error(const struct dc_posix_env *env,
 
     return DESTROY_SETTINGS;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int read_env_vars_error(const struct dc_posix_env *env,
                                struct dc_error *err,
                                void *arg)
@@ -634,7 +642,10 @@ static int read_env_vars_error(const struct dc_posix_env *env,
 
     return DESTROY_SETTINGS;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int read_config_error(const struct dc_posix_env *env,
                              struct dc_error *err,
                              void *arg)
@@ -643,7 +654,10 @@ static int read_config_error(const struct dc_posix_env *env,
 
     return DESTROY_SETTINGS;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int set_defaults_error(const struct dc_posix_env *env,
                               struct dc_error *err,
                               void *arg)
@@ -652,7 +666,10 @@ static int set_defaults_error(const struct dc_posix_env *env,
 
     return DESTROY_SETTINGS;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int run_error(const struct dc_posix_env *env,
                      struct dc_error *err,
                      void *arg)
@@ -661,7 +678,10 @@ static int run_error(const struct dc_posix_env *env,
 
     return DESTROY_SETTINGS;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int cleanup_error(const struct dc_posix_env *env,
                          struct dc_error *err,
                          void *arg)
@@ -670,7 +690,10 @@ static int cleanup_error(const struct dc_posix_env *env,
 
     return DESTROY_SETTINGS;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static int destroy_settings_error(const struct dc_posix_env *env,
                                   struct dc_error *err,
                                   void *arg)
@@ -679,7 +702,11 @@ static int destroy_settings_error(const struct dc_posix_env *env,
 
     return DC_FSM_EXIT;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-function"
 static void will_change_state(const struct dc_posix_env *env,
                               struct dc_error *err,
                               const struct dc_fsm_info *info,
@@ -688,7 +715,11 @@ static void will_change_state(const struct dc_posix_env *env,
 {
     printf("%s: will change %d -> %d\n", dc_fsm_info_get_name(info), from_state_id, to_state_id);
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-function"
 static void did_change_state(const struct dc_posix_env *env,
                              struct dc_error *err,
                              const struct dc_fsm_info *info,
@@ -698,7 +729,11 @@ static void did_change_state(const struct dc_posix_env *env,
 {
     printf("%s: did change %d -> %d moving to %d\n", dc_fsm_info_get_name(info), from_state_id, to_state_id, next_id);
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-function"
 static void bad_change_state(const struct dc_posix_env *env,
                              struct dc_error *err,
                              const struct dc_fsm_info *info,
@@ -707,3 +742,4 @@ static void bad_change_state(const struct dc_posix_env *env,
 {
     printf("%s: bad change %d -> %d\n", dc_fsm_info_get_name(info), from_state_id, to_state_id);
 }
+#pragma GCC diagnostic pop

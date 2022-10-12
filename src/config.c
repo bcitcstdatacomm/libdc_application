@@ -88,6 +88,8 @@ int dc_default_load_config(const struct dc_posix_env *env,
     return 0;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 const void *dc_string_from_config(const struct dc_posix_env *env,
                                   struct dc_error *err,
                                   config_setting_t *item)
@@ -96,7 +98,10 @@ const void *dc_string_from_config(const struct dc_posix_env *env,
 
     return item->value.sval;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 const void *dc_flag_from_config(const struct dc_posix_env *env,
                                 struct dc_error *err,
                                 config_setting_t *item)
@@ -115,6 +120,7 @@ const void *dc_flag_from_config(const struct dc_posix_env *env,
 
     return &false_value;
 }
+#pragma GCC diagnostic pop
 
 const void *dc_uint16_from_config(const struct dc_posix_env *env, struct dc_error *err, config_setting_t *item)
 {

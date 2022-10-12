@@ -36,6 +36,8 @@ void dc_options_set_regex(const struct dc_posix_env *env,
     dc_setting_regex_set(env, err, (struct dc_setting_regex *)setting, (const char *)value, type);
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void dc_options_set_path(const struct dc_posix_env *env,
                          struct dc_error *err,
                          struct dc_setting *setting,
@@ -44,7 +46,10 @@ void dc_options_set_path(const struct dc_posix_env *env,
 {
     dc_setting_path_set(env, err, (struct dc_setting_path *)setting, (const char *)value, type);
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void dc_options_set_bool(const struct dc_posix_env *env,
                          struct dc_error *err,
                          struct dc_setting *setting,
@@ -56,7 +61,10 @@ void dc_options_set_bool(const struct dc_posix_env *env,
     pbool = value;
     dc_setting_bool_set(env, (struct dc_setting_bool *)setting, *pbool, type);
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void dc_options_set_uint16(const struct dc_posix_env *env,
                            struct dc_error *err,
                            struct dc_setting *setting,
@@ -68,7 +76,10 @@ void dc_options_set_uint16(const struct dc_posix_env *env,
     punit16 = value;
     dc_setting_uint16_set(env, (struct dc_setting_uint16 *)setting, *punit16, type);
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 const void *
 dc_string_from_string(const struct dc_posix_env *env, struct dc_error *err, const char *str)
 {
@@ -76,7 +87,10 @@ dc_string_from_string(const struct dc_posix_env *env, struct dc_error *err, cons
 
     return str;
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 const void *dc_flag_from_string(const struct dc_posix_env *env,
                                 struct dc_error *err,
                                 const char *str)
@@ -87,6 +101,7 @@ const void *dc_flag_from_string(const struct dc_posix_env *env,
 
     return &value;
 }
+#pragma GCC diagnostic pop
 
 const void *dc_uint16_from_string(const struct dc_posix_env *env, struct dc_error *err, const char *str)
 {
