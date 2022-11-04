@@ -15,10 +15,10 @@
  */
 
 #include "options.h"
-#include <dc_posix/dc_stdlib.h>
+#include <dc_c/dc_stdlib.h>
 #include <dc_util/types.h>
 
-void dc_options_set_string(const struct dc_posix_env *env,
+void dc_options_set_string(const struct dc_env *env,
                            struct dc_error *err,
                            struct dc_setting *setting,
                            const void *value,
@@ -27,7 +27,7 @@ void dc_options_set_string(const struct dc_posix_env *env,
     dc_setting_string_set(env, err, (struct dc_setting_string *)setting, (const char *)value, type);
 }
 
-void dc_options_set_regex(const struct dc_posix_env *env,
+void dc_options_set_regex(const struct dc_env *env,
                           struct dc_error *err,
                           struct dc_setting *setting,
                           const void *value,
@@ -38,7 +38,7 @@ void dc_options_set_regex(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void dc_options_set_path(const struct dc_posix_env *env,
+void dc_options_set_path(const struct dc_env *env,
                          struct dc_error *err,
                          struct dc_setting *setting,
                          const void *value,
@@ -50,7 +50,7 @@ void dc_options_set_path(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void dc_options_set_bool(const struct dc_posix_env *env,
+void dc_options_set_bool(const struct dc_env *env,
                          struct dc_error *err,
                          struct dc_setting *setting,
                          const void *value,
@@ -65,7 +65,7 @@ void dc_options_set_bool(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void dc_options_set_uint16(const struct dc_posix_env *env,
+void dc_options_set_uint16(const struct dc_env *env,
                            struct dc_error *err,
                            struct dc_setting *setting,
                            const void *value,
@@ -81,7 +81,7 @@ void dc_options_set_uint16(const struct dc_posix_env *env,
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 const void *
-dc_string_from_string(const struct dc_posix_env *env, struct dc_error *err, const char *str)
+dc_string_from_string(const struct dc_env *env, struct dc_error *err, const char *str)
 {
     DC_TRACE(env);
 
@@ -91,7 +91,7 @@ dc_string_from_string(const struct dc_posix_env *env, struct dc_error *err, cons
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-const void *dc_flag_from_string(const struct dc_posix_env *env,
+const void *dc_flag_from_string(const struct dc_env *env,
                                 struct dc_error *err,
                                 const char *str)
 {
@@ -103,7 +103,7 @@ const void *dc_flag_from_string(const struct dc_posix_env *env,
 }
 #pragma GCC diagnostic pop
 
-const void *dc_uint16_from_string(const struct dc_posix_env *env, struct dc_error *err, const char *str)
+const void *dc_uint16_from_string(const struct dc_env *env, struct dc_error *err, const char *str)
 {
     uint16_t *value;
 
@@ -116,7 +116,7 @@ const void *dc_uint16_from_string(const struct dc_posix_env *env, struct dc_erro
 
         if(dc_error_has_error(err))
         {
-            dc_free(env, value, sizeof(uint16_t));
+            dc_free(env, value);
             value = NULL;
         }
     }

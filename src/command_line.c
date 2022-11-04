@@ -16,15 +16,15 @@
 
 #include "command_line.h"
 #include "options.h"
-#include <dc_posix/dc_stdlib.h>
-#include <getopt.h>
+#include <dc_c/dc_stdlib.h>
+#include <dc_unix/dc_getopt.h>
 
 
-static struct option *create_long_opts(const struct dc_posix_env *env,
+static struct option *create_long_opts(const struct dc_env *env,
                                        struct dc_error *err,
                                        const struct dc_opt_settings *opt_settings,
                                        size_t count);
-static void parse_arguments(const struct dc_posix_env *env,
+static void parse_arguments(const struct dc_env *env,
                             struct dc_error *err,
                             int argc,
                             char *argv[],
@@ -33,7 +33,7 @@ static void parse_arguments(const struct dc_posix_env *env,
                             size_t count);
 
 
-int dc_default_parse_command_line(const struct dc_posix_env *env,
+int dc_default_parse_command_line(const struct dc_env *env,
                                   struct dc_error *err,
                                   struct dc_application_settings *settings,
                                   int argc,
@@ -64,7 +64,7 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
             opt_settings->argc = argc;
             opt_settings->argv = argv;
 
-            dc_free(env, long_options, (count + 1) * sizeof(struct option));
+            dc_free(env, long_options);
         }
     }
 
@@ -72,7 +72,7 @@ int dc_default_parse_command_line(const struct dc_posix_env *env,
 }
 
 
-static struct option *create_long_opts(const struct dc_posix_env *env,
+static struct option *create_long_opts(const struct dc_env *env,
                                        struct dc_error *err,
                                        const struct dc_opt_settings *opt_settings,
                                        size_t count)
@@ -96,7 +96,7 @@ static struct option *create_long_opts(const struct dc_posix_env *env,
 }
 
 
-static void parse_arguments(const struct dc_posix_env *env,
+static void parse_arguments(const struct dc_env *env,
                             struct dc_error *err,
                             int argc,
                             char *argv[],
@@ -110,7 +110,7 @@ static void parse_arguments(const struct dc_posix_env *env,
         const void *value;
         struct options *opt;
 
-        c = getopt_long(argc, (char **)argv, opt_settings->flags, long_options, NULL);
+        c = dc_getopt_long(env, err, argc, (char **)argv, opt_settings->flags, long_options, NULL);
 
         if(c == -1)
         {

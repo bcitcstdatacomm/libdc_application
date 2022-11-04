@@ -18,7 +18,7 @@
  */
 
 #include "application.h"
-#include <dc_posix/dc_posix_env.h>
+#include <dc_env/env.h>
 
 /**
  *
@@ -28,7 +28,7 @@
  * @param envvars
  * @return
  */
-int dc_default_read_env_vars(const struct dc_posix_env *env,
+int dc_default_read_env_vars(const struct dc_env *env,
                              struct dc_error *err,
                              struct dc_application_settings *settings,
                              char **envvars);

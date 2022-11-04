@@ -16,9 +16,9 @@
 
 #include "config.h"
 #include "options.h"
-#include <dc_posix/dc_stdlib.h>
+#include <dc_c/dc_stdlib.h>
 
-int dc_default_load_config(const struct dc_posix_env *env,
+int dc_default_load_config(const struct dc_env *env,
                            struct dc_error *err,
                            struct dc_application_settings *settings)
 {
@@ -90,7 +90,7 @@ int dc_default_load_config(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-const void *dc_string_from_config(const struct dc_posix_env *env,
+const void *dc_string_from_config(const struct dc_env *env,
                                   struct dc_error *err,
                                   config_setting_t *item)
 {
@@ -102,7 +102,7 @@ const void *dc_string_from_config(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-const void *dc_flag_from_config(const struct dc_posix_env *env,
+const void *dc_flag_from_config(const struct dc_env *env,
                                 struct dc_error *err,
                                 config_setting_t *item)
 {
@@ -122,7 +122,7 @@ const void *dc_flag_from_config(const struct dc_posix_env *env,
 }
 #pragma GCC diagnostic pop
 
-const void *dc_uint16_from_config(const struct dc_posix_env *env, struct dc_error *err, config_setting_t *item)
+const void *dc_uint16_from_config(const struct dc_env *env, struct dc_error *err, config_setting_t *item)
 {
     long long config_value;
     uint16_t *value;

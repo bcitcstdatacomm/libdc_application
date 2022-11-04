@@ -1,10 +1,6 @@
 #ifndef LIBDC_APPLICATION_OPTIONS_H
 #define LIBDC_APPLICATION_OPTIONS_H
 
-#include "application.h"
-#include <dc_posix/dc_posix_env.h>
-#include <libconfig.h>
-
 /*
  * Copyright 2021-2021 D'Arcy Smith.
  *
@@ -21,7 +17,13 @@
  * limitations under the License.
  */
 
-typedef void (*dc_setting_set_func)(const struct dc_posix_env *env,
+
+#include "application.h"
+#include <dc_env/env.h>
+#include <libconfig.h>
+
+
+typedef void (*dc_setting_set_func)(const struct dc_env *env,
                                     struct dc_error *err,
                                     struct dc_setting *setting,
                                     const void *value, dc_setting_type type);
@@ -35,12 +37,12 @@ struct options
     int val;
     const char *env_key;
 
-    const void *(*read_from_string)(const struct dc_posix_env *env,
+    const void *(*read_from_string)(const struct dc_env *env,
                                     struct dc_error *err, const char *str);
 
     const char *config_key;
 
-    const void *(*read_from_config)(const struct dc_posix_env *env,
+    const void *(*read_from_config)(const struct dc_env *env,
                                     struct dc_error *err, config_setting_t *item);
 
     const void *default_value;
@@ -59,33 +61,33 @@ struct dc_opt_settings
     char **argv;
 };
 
-void dc_options_set_string(const struct dc_posix_env *env, struct dc_error *err,
+void dc_options_set_string(const struct dc_env *env, struct dc_error *err,
                            struct dc_setting *setting, const void *value,
                            dc_setting_type type);
 
-void dc_options_set_regex(const struct dc_posix_env *env, struct dc_error *err,
+void dc_options_set_regex(const struct dc_env *env, struct dc_error *err,
                           struct dc_setting *setting, const void *value,
                           dc_setting_type type);
 
-void dc_options_set_path(const struct dc_posix_env *env, struct dc_error *err,
+void dc_options_set_path(const struct dc_env *env, struct dc_error *err,
                          struct dc_setting *setting, const void *value,
                          dc_setting_type type);
 
-void dc_options_set_bool(const struct dc_posix_env *env, struct dc_error *err,
+void dc_options_set_bool(const struct dc_env *env, struct dc_error *err,
                          struct dc_setting *setting, const void *value,
                          dc_setting_type type);
 
-void dc_options_set_uint16(const struct dc_posix_env *env, struct dc_error *err,
+void dc_options_set_uint16(const struct dc_env *env, struct dc_error *err,
                            struct dc_setting *setting, const void *value,
                            dc_setting_type type);
 
-const void *dc_string_from_string(const struct dc_posix_env *env,
+const void *dc_string_from_string(const struct dc_env *env,
                                   struct dc_error *err, const char *str);
 
-const void *dc_flag_from_string(const struct dc_posix_env *env,
+const void *dc_flag_from_string(const struct dc_env *env,
                                 struct dc_error *err, const char *str);
 
-const void *dc_uint16_from_string(const struct dc_posix_env *env,
+const void *dc_uint16_from_string(const struct dc_env *env,
                                   struct dc_error *err, const char *str);
 
 #endif // LIBDC_APPLICATION_OPTIONS_H

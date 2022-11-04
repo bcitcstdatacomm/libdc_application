@@ -19,69 +19,69 @@
 #include "config.h"
 #include "defaults.h"
 #include "environment.h"
+#include <dc_c/dc_stdlib.h>
+#include <dc_c/dc_string.h>
 #include <dc_fsm/fsm.h>
-#include <dc_posix/dc_stdlib.h>
-#include <dc_posix/dc_string.h>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 extern char **environ;
 
-static int create_settings(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int create_settings(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int parse_command_line(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int parse_command_line(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int read_env_vars(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int read_env_vars(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int read_config(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int read_config(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int set_defaults(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int set_defaults(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int run(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int run(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int cleanup(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int cleanup(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int destroy_settings(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int destroy_settings(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int create_settings_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int create_settings_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int parse_command_line_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int parse_command_line_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int read_env_vars_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int read_env_vars_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int read_config_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int read_config_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int set_defaults_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int set_defaults_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int run_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int run_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int cleanup_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int cleanup_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
-static int destroy_settings_error(const struct dc_posix_env *env, struct dc_error *err, void *arg);
+static int destroy_settings_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
 struct dc_application_lifecycle
 {
-    struct dc_application_settings *(*create_settings)(const struct dc_posix_env *env, struct dc_error *err);
+    struct dc_application_settings *(*create_settings)(const struct dc_env *env, struct dc_error *err);
 
-    int (*parse_command_line)(const struct dc_posix_env *env,
+    int (*parse_command_line)(const struct dc_env *env,
                               struct dc_error *err,
                               struct dc_application_settings *,
                               int argc,
                               char *argv[]);
 
-    int (*read_env_vars)(const struct dc_posix_env *env,
+    int (*read_env_vars)(const struct dc_env *env,
                          struct dc_error *err,
                          struct dc_application_settings *,
                          char **envvars);
 
-    int (*read_config)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
+    int (*read_config)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *);
 
-    int (*set_defaults)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
+    int (*set_defaults)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *);
 
-    int (*run)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
+    int (*run)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *);
 
-    int (*cleanup)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *);
+    int (*cleanup)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *);
 
-    int (*destroy_settings)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings **);
+    int (*destroy_settings)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings **);
 };
 
 struct dc_application_info
@@ -114,31 +114,31 @@ enum application_states
     DESTROY_SETTINGS_ERROR,                 // 17
 };
 
-static void will_change_state(const struct dc_posix_env *env,
+static void will_change_state(const struct dc_env *env,
                               struct dc_error *err,
                               const struct dc_fsm_info *info,
                               int from_state_id,
                               int to_state_id);
-static void did_change_state(const struct dc_posix_env *env,
+static void did_change_state(const struct dc_env *env,
                              struct dc_error *err,
                              const struct dc_fsm_info *info,
                              int from_state_id,
                              int to_state_id,
                              int next_id);
-static void bad_change_state(const struct dc_posix_env *env,
+static void bad_change_state(const struct dc_env *env,
                              struct dc_error *err,
                              const struct dc_fsm_info *info,
                              int from_state_id,
                              int to_state_id);
 
 struct dc_application_lifecycle *dc_application_lifecycle_create(
-        const struct dc_posix_env *env,
+        const struct dc_env *env,
         struct dc_error *err,
-        struct dc_application_settings *(*create_settings_func)(const struct dc_posix_env *env, struct dc_error *err),
-        int (*destroy_settings_func)(const struct dc_posix_env *env,
+        struct dc_application_settings *(*create_settings_func)(const struct dc_env *env, struct dc_error *err),
+        int (*destroy_settings_func)(const struct dc_env *env,
                                      struct dc_error *err,
                                      struct dc_application_settings **),
-        int (*run_func)(const struct dc_posix_env *env, struct dc_error *err,
+        int (*run_func)(const struct dc_env *env, struct dc_error *err,
                         struct dc_application_settings *))
 {
     struct dc_application_lifecycle *lifecycle;
@@ -156,17 +156,17 @@ struct dc_application_lifecycle *dc_application_lifecycle_create(
     return lifecycle;
 }
 
-void dc_application_lifecycle_destroy(const struct dc_posix_env *env, struct dc_application_lifecycle **plifecycle)
+void dc_application_lifecycle_destroy(const struct dc_env *env, struct dc_application_lifecycle **plifecycle)
 {
     DC_TRACE(env);
-    dc_free(env, *plifecycle, sizeof(struct dc_application_lifecycle));
+    dc_free(env, *plifecycle);
     *plifecycle = NULL;
 }
 
 void dc_application_lifecycle_set_parse_command_line(
-        const struct dc_posix_env *env,
+        const struct dc_env *env,
         struct dc_application_lifecycle *lifecycle,
-        int (*func)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *, int,
+        int (*func)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *, int,
                     char *[]))
 {
     DC_TRACE(env);
@@ -174,17 +174,17 @@ void dc_application_lifecycle_set_parse_command_line(
 }
 
 void dc_application_lifecycle_set_read_env_vars(
-        const struct dc_posix_env *env,
+        const struct dc_env *env,
         struct dc_application_lifecycle *lifecycle,
-        int (*func)(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *, char **))
+        int (*func)(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *, char **))
 {
     DC_TRACE(env);
     lifecycle->read_env_vars = func;
 }
 
-void dc_application_lifecycle_set_read_config(const struct dc_posix_env *env,
+void dc_application_lifecycle_set_read_config(const struct dc_env *env,
                                               struct dc_application_lifecycle *lifecycle,
-                                              int (*func)(const struct dc_posix_env *env,
+                                              int (*func)(const struct dc_env *env,
                                                           struct dc_error *err,
                                                           struct dc_application_settings *))
 {
@@ -192,9 +192,9 @@ void dc_application_lifecycle_set_read_config(const struct dc_posix_env *env,
     lifecycle->read_config = func;
 }
 
-void dc_application_lifecycle_set_set_defaults(const struct dc_posix_env *env,
+void dc_application_lifecycle_set_set_defaults(const struct dc_env *env,
                                                struct dc_application_lifecycle *lifecycle,
-                                               int (*func)(const struct dc_posix_env *env,
+                                               int (*func)(const struct dc_env *env,
                                                            struct dc_error *err,
                                                            struct dc_application_settings *))
 {
@@ -202,9 +202,9 @@ void dc_application_lifecycle_set_set_defaults(const struct dc_posix_env *env,
     lifecycle->set_defaults = func;
 }
 
-void dc_application_lifecycle_set_cleanup(const struct dc_posix_env *env,
+void dc_application_lifecycle_set_cleanup(const struct dc_env *env,
                                           struct dc_application_lifecycle *lifecycle,
-                                          int (*func)(const struct dc_posix_env *env,
+                                          int (*func)(const struct dc_env *env,
                                                       struct dc_error *err,
                                                       struct dc_application_settings *))
 {
@@ -213,7 +213,7 @@ void dc_application_lifecycle_set_cleanup(const struct dc_posix_env *env,
 }
 
 struct dc_application_info *
-dc_application_info_create(const struct dc_posix_env *env, struct dc_error *err, const char *name)
+dc_application_info_create(const struct dc_env *env, struct dc_error *err, const char *name)
 {
     struct dc_application_info *info;
 
@@ -238,12 +238,12 @@ dc_application_info_create(const struct dc_posix_env *env, struct dc_error *err,
     return info;
 }
 
-struct dc_application_lifecycle *dc_default_create_lifecycle(const struct dc_posix_env *env, struct dc_error *err,
-                                                             struct dc_application_settings *(*create_settings_func)(const struct dc_posix_env *env, struct dc_error *err),
-                                                             int (*destroy_settings_func)(const struct dc_posix_env *env,
+struct dc_application_lifecycle *dc_default_create_lifecycle(const struct dc_env *env, struct dc_error *err,
+                                                             struct dc_application_settings *(*create_settings_func)(const struct dc_env *env, struct dc_error *err),
+                                                             int (*destroy_settings_func)(const struct dc_env *env,
                                                                                           struct dc_error *err,
                                                                                           struct dc_application_settings **),
-                                                             int (*run_func)(const struct dc_posix_env *env, struct dc_error *err,
+                                                             int (*run_func)(const struct dc_env *env, struct dc_error *err,
                                                                              struct dc_application_settings *))
 {
     struct dc_application_lifecycle *lifecycle;
@@ -258,13 +258,13 @@ struct dc_application_lifecycle *dc_default_create_lifecycle(const struct dc_pos
     return lifecycle;
 }
 
-void dc_default_destroy_lifecycle(const struct dc_posix_env *env, struct dc_application_lifecycle **plifecycle)
+void dc_default_destroy_lifecycle(const struct dc_env *env, struct dc_application_lifecycle **plifecycle)
 {
     DC_TRACE(env);
     dc_application_lifecycle_destroy(env, plifecycle);
 }
 
-void dc_application_info_destroy(const struct dc_posix_env *env, struct dc_application_info **pinfo)
+void dc_application_info_destroy(const struct dc_env *env, struct dc_application_info **pinfo)
 {
     struct dc_application_info *info;
 
@@ -273,42 +273,36 @@ void dc_application_info_destroy(const struct dc_posix_env *env, struct dc_appli
 
     if(info->default_config_path)
     {
-        size_t length;
-
-        length = dc_strlen(env, info->default_config_path);
-        dc_free(env, info->default_config_path, length);
+        dc_free(env, info->default_config_path);
     }
 
     if(info->name)
     {
-        size_t length;
-
-        length = dc_strlen(env, info->name);
-        dc_free(env, info->name, length);
+        dc_free(env, info->name);
     }
 
-    dc_free(env, *pinfo, sizeof(struct dc_application_info));
+    dc_free(env, *pinfo);
     *pinfo = NULL;
 }
 
-int dc_application_run(const struct dc_posix_env *env,
+int dc_application_run(const struct dc_env *env,
                        struct dc_error *err,
                        struct dc_application_info *info,
-                       struct dc_application_settings *(*create_settings_func)(const struct dc_posix_env *env, struct dc_error *err),
-                       int (*destroy_settings_func)(const struct dc_posix_env *env,
+                       struct dc_application_settings *(*create_settings_func)(const struct dc_env *env, struct dc_error *err),
+                       int (*destroy_settings_func)(const struct dc_env *env,
                                                     struct dc_error *err,
                                                     struct dc_application_settings **),
-                       int (*run_func)(const struct dc_posix_env *env, struct dc_error *err,
+                       int (*run_func)(const struct dc_env *env, struct dc_error *err,
                                        struct dc_application_settings *),
-                       struct dc_application_lifecycle *(*create_lifecycle_func)(const struct dc_posix_env *env,
+                       struct dc_application_lifecycle *(*create_lifecycle_func)(const struct dc_env *env,
                                                                                  struct dc_error *err,
-                                                                                 struct dc_application_settings *(*create_settings_func)(const struct dc_posix_env *env, struct dc_error *err),
-                                                                                 int (*destroy_settings_func)(const struct dc_posix_env *env,
+                                                                                 struct dc_application_settings *(*create_settings_func)(const struct dc_env *env, struct dc_error *err),
+                                                                                 int (*destroy_settings_func)(const struct dc_env *env,
                                                                                                               struct dc_error *err,
                                                                                                               struct dc_application_settings **),
-                                                                                 int (*run_func)(const struct dc_posix_env *env, struct dc_error *err,
+                                                                                 int (*run_func)(const struct dc_env *env, struct dc_error *err,
                                                                                                  struct dc_application_settings *)),
-                       void (*destroy_lifecycle_func)(const struct dc_posix_env *env,
+                       void (*destroy_lifecycle_func)(const struct dc_env *env,
                                                       struct dc_application_lifecycle **plifecycle),
                        const char *default_config_path,
                        int argc,
@@ -390,7 +384,7 @@ int dc_application_run(const struct dc_posix_env *env,
     return ret_val;
 }
 
-static int create_settings(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int create_settings(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -420,7 +414,7 @@ static int create_settings(const struct dc_posix_env *env, struct dc_error *err,
     return ret_val;
 }
 
-static int parse_command_line(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int parse_command_line(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -446,7 +440,7 @@ static int parse_command_line(const struct dc_posix_env *env, struct dc_error *e
     return ret_val;
 }
 
-static int read_env_vars(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int read_env_vars(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -472,7 +466,7 @@ static int read_env_vars(const struct dc_posix_env *env, struct dc_error *err, v
     return ret_val;
 }
 
-static int read_config(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int read_config(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -508,7 +502,7 @@ static int read_config(const struct dc_posix_env *env, struct dc_error *err, voi
     return ret_val;
 }
 
-static int set_defaults(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int set_defaults(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -534,7 +528,7 @@ static int set_defaults(const struct dc_posix_env *env, struct dc_error *err, vo
     return ret_val;
 }
 
-static int run(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int run(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -555,7 +549,7 @@ static int run(const struct dc_posix_env *env, struct dc_error *err, void *arg)
     return ret_val;
 }
 
-static int cleanup(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int cleanup(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -581,7 +575,7 @@ static int cleanup(const struct dc_posix_env *env, struct dc_error *err, void *a
     return ret_val;
 }
 
-static int destroy_settings(const struct dc_posix_env *env, struct dc_error *err, void *arg)
+static int destroy_settings(const struct dc_env *env, struct dc_error *err, void *arg)
 {
     struct dc_application_info *info;
     int ret_val;
@@ -610,7 +604,7 @@ static int destroy_settings(const struct dc_posix_env *env, struct dc_error *err
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int create_settings_error(const struct dc_posix_env *env,
+static int create_settings_error(const struct dc_env *env,
                                  struct dc_error *err,
                                  void *arg)
 {
@@ -622,7 +616,7 @@ static int create_settings_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int parse_command_line_error(const struct dc_posix_env *env,
+static int parse_command_line_error(const struct dc_env *env,
                                     struct dc_error *err,
                                     void *arg)
 {
@@ -634,7 +628,7 @@ static int parse_command_line_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int read_env_vars_error(const struct dc_posix_env *env,
+static int read_env_vars_error(const struct dc_env *env,
                                struct dc_error *err,
                                void *arg)
 {
@@ -646,7 +640,7 @@ static int read_env_vars_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int read_config_error(const struct dc_posix_env *env,
+static int read_config_error(const struct dc_env *env,
                              struct dc_error *err,
                              void *arg)
 {
@@ -658,7 +652,7 @@ static int read_config_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int set_defaults_error(const struct dc_posix_env *env,
+static int set_defaults_error(const struct dc_env *env,
                               struct dc_error *err,
                               void *arg)
 {
@@ -670,7 +664,7 @@ static int set_defaults_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int run_error(const struct dc_posix_env *env,
+static int run_error(const struct dc_env *env,
                      struct dc_error *err,
                      void *arg)
 {
@@ -682,7 +676,7 @@ static int run_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int cleanup_error(const struct dc_posix_env *env,
+static int cleanup_error(const struct dc_env *env,
                          struct dc_error *err,
                          void *arg)
 {
@@ -694,7 +688,7 @@ static int cleanup_error(const struct dc_posix_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static int destroy_settings_error(const struct dc_posix_env *env,
+static int destroy_settings_error(const struct dc_env *env,
                                   struct dc_error *err,
                                   void *arg)
 {
@@ -707,7 +701,7 @@ static int destroy_settings_error(const struct dc_posix_env *env,
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-function"
-static void will_change_state(const struct dc_posix_env *env,
+static void will_change_state(const struct dc_env *env,
                               struct dc_error *err,
                               const struct dc_fsm_info *info,
                               int from_state_id,
@@ -720,7 +714,7 @@ static void will_change_state(const struct dc_posix_env *env,
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-function"
-static void did_change_state(const struct dc_posix_env *env,
+static void did_change_state(const struct dc_env *env,
                              struct dc_error *err,
                              const struct dc_fsm_info *info,
                              int from_state_id,
@@ -734,7 +728,7 @@ static void did_change_state(const struct dc_posix_env *env,
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-function"
-static void bad_change_state(const struct dc_posix_env *env,
+static void bad_change_state(const struct dc_env *env,
                              struct dc_error *err,
                              const struct dc_fsm_info *info,
                              int from_state_id,

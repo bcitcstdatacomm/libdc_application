@@ -10,9 +10,9 @@
 #include <stdlib.h>
 
 
-static int run(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings);
+static int run(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *settings);
 static void error_reporter(const struct dc_error *err);
-static void trace_reporter(const struct dc_posix_env *env,
+static void trace_reporter(const struct dc_env *env,
                           const char *file_name,
                           const char *function_name,
                           size_t line_number);
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 {
     dc_posix_tracer tracer;
     dc_error_reporter reporter;
-    struct dc_posix_env env;
+    struct dc_env env;
     struct dc_error err;
     struct dc_application_info *info;
     int ret_val;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     tracer = NULL;
 //    tracer = trace_reporter;
     dc_error_init(&err, reporter);
-    dc_posix_env_init(&env, tracer);
+    dc_env_init(&env, tracer);
     info = dc_application_info_create(&env, &err, "Hello World Application");
     ret_val = dc_application_run(&env, &err, info, NULL, NULL, run, dc_default_create_lifecycle, dc_default_destroy_lifecycle, NULL, argc, argv);
     dc_application_info_destroy(&env, &info);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     return ret_val;
 }
 
-static int run(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings)
+static int run(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *settings)
 {
     DC_TRACE(env);
 
@@ -55,7 +55,7 @@ static void error_reporter(const struct dc_error *err)
     fprintf(stderr, "ERROR: %s\n", err->message);
 }
 
-static void trace_reporter(const struct dc_posix_env *env,
+static void trace_reporter(const struct dc_env *env,
                           const char *file_name,
                           const char *function_name,
                           size_t line_number)

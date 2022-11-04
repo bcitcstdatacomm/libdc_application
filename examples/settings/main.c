@@ -18,13 +18,13 @@ struct application_settings
 
 
 
-static struct dc_application_settings *create_settings(const struct dc_posix_env *env, struct dc_error *err);
-static int destroy_settings(const struct dc_posix_env *env,
+static struct dc_application_settings *create_settings(const struct dc_env *env, struct dc_error *err);
+static int destroy_settings(const struct dc_env *env,
                             struct dc_error *err,
                             struct dc_application_settings **psettings);
-static int run(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings);
+static int run(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *settings);
 static void error_reporter(const struct dc_error *err);
-static void trace_reporter(const struct dc_posix_env *env,
+static void trace_reporter(const struct dc_env *env,
                           const char *file_name,
                           const char *function_name,
                           size_t line_number);
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 {
     dc_error_reporter reporter;
     dc_posix_tracer tracer;
-    struct dc_posix_env env;
+    struct dc_env env;
     struct dc_error err;
     struct dc_application_info *info;
     int ret_val;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     tracer = trace_reporter;
     tracer = NULL;
     dc_error_init(&err, reporter);
-    dc_posix_env_init(&env, tracer);
+    dc_env_init(&env, tracer);
     info = dc_application_info_create(&env, &err, "Settings Application");
     ret_val = dc_application_run(&env, &err, info, create_settings, destroy_settings, run, dc_default_create_lifecycle, dc_default_destroy_lifecycle, NULL, argc, argv);
     dc_application_info_destroy(&env, &info);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     return ret_val;
 }
 
-static struct dc_application_settings *create_settings(const struct dc_posix_env *env, struct dc_error *err)
+static struct dc_application_settings *create_settings(const struct dc_env *env, struct dc_error *err)
 {
     static bool default_verbose = false;
     struct application_settings *settings;
@@ -102,7 +102,7 @@ static struct dc_application_settings *create_settings(const struct dc_posix_env
     return (struct dc_application_settings *)settings;
 }
 
-static int destroy_settings(const struct dc_posix_env *env,
+static int destroy_settings(const struct dc_env *env,
                             struct dc_error *err,
                             struct dc_application_settings **psettings)
 {
@@ -122,7 +122,7 @@ static int destroy_settings(const struct dc_posix_env *env,
     return 0;
 }
 
-static int run(const struct dc_posix_env *env, struct dc_error *err, struct dc_application_settings *settings)
+static int run(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *settings)
 {
     struct application_settings *app_settings;
     const char *message;
@@ -142,7 +142,7 @@ static void error_reporter(const struct dc_error *err)
     fprintf(stderr, "ERROR: %s\n", err->message);
 }
 
-static void trace_reporter(const struct dc_posix_env *env,
+static void trace_reporter(const struct dc_env *env,
                           const char *file_name,
                           const char *function_name,
                           size_t line_number)

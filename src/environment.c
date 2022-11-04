@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
+
 #include "environment.h"
 #include "options.h"
-#include <dc_posix/dc_stdlib.h>
+#include <dc_c/dc_stdlib.h>
+#include <dc_c/dc_string.h>
 #include <dc_posix/dc_string.h>
 
-static bool set_from_env(const struct dc_posix_env *env,
+
+static bool set_from_env(const struct dc_env *env,
                          struct dc_error *err,
                          struct dc_opt_settings *settings,
                          size_t prefix_len,
                          const char *key,
                          const char *value);
 
-int dc_default_read_env_vars(const struct dc_posix_env *env,
+int dc_default_read_env_vars(const struct dc_env *env,
                              struct dc_error *err,
                              struct dc_application_settings *settings,
                              char **envvars)
@@ -68,7 +71,7 @@ int dc_default_read_env_vars(const struct dc_posix_env *env,
 
                 // TODO: what to do about an err?
                 set_from_env(env, err, opt_settings, prefix_len, key, value);
-                dc_free(env, env_var, length * sizeof(char));
+                dc_free(env, env_var);
             }
         }
 
@@ -78,7 +81,7 @@ int dc_default_read_env_vars(const struct dc_posix_env *env,
     return 0;
 }
 
-static bool set_from_env(const struct dc_posix_env *env,
+static bool set_from_env(const struct dc_env *env,
                          struct dc_error *err,
                          struct dc_opt_settings *settings,
                          size_t prefix_len,

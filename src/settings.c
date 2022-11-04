@@ -15,9 +15,9 @@
  */
 
 #include "settings.h"
+#include <dc_c/dc_stdlib.h>
+#include <dc_c/dc_string.h>
 #include <dc_posix/dc_regex.h>
-#include <dc_posix/dc_stdlib.h>
-#include <dc_posix/dc_string.h>
 #include <dc_util/path.h>
 
 struct dc_setting_string
@@ -52,14 +52,14 @@ struct dc_setting_uint16
     uint16_t value;
 };
 
-bool dc_setting_is_set(const struct dc_posix_env *env, struct dc_setting *setting)
+bool dc_setting_is_set(const struct dc_env *env, struct dc_setting *setting)
 {
     DC_TRACE(env);
 
     return setting->type != DC_SETTING_NONE;
 }
 
-struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env, struct dc_error *err)
+struct dc_setting_path *dc_setting_path_create(const struct dc_env *env, struct dc_error *err)
 {
     struct dc_setting_path *setting;
 
@@ -75,7 +75,7 @@ struct dc_setting_path *dc_setting_path_create(const struct dc_posix_env *env, s
     return setting;
 }
 
-void dc_setting_path_destroy(const struct dc_posix_env *env, struct dc_setting_path **psetting)
+void dc_setting_path_destroy(const struct dc_env *env, struct dc_setting_path **psetting)
 {
     struct dc_setting_path *setting;
 
@@ -84,17 +84,14 @@ void dc_setting_path_destroy(const struct dc_posix_env *env, struct dc_setting_p
 
     if(setting->path)
     {
-        size_t length;
-
-        length = dc_strlen(env, setting->path);
-        dc_free(env, setting->path, length);
+        dc_free(env, setting->path);
     }
 
-    dc_free(env, *psetting, sizeof(struct dc_setting_path));
+    dc_free(env, *psetting);
     *psetting = NULL;
 }
 
-bool dc_setting_path_set(const struct dc_posix_env *env,
+bool dc_setting_path_set(const struct dc_env *env,
                          struct dc_error *err,
                          struct dc_setting_path *setting,
                          const char *value,
@@ -122,14 +119,14 @@ bool dc_setting_path_set(const struct dc_posix_env *env,
     return ret_val;
 }
 
-const char *dc_setting_path_get(const struct dc_posix_env *env, struct dc_setting_path *setting)
+const char *dc_setting_path_get(const struct dc_env *env, struct dc_setting_path *setting)
 {
     DC_TRACE(env);
 
     return setting->path;
 }
 
-struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *env, struct dc_error *err)
+struct dc_setting_string *dc_setting_string_create(const struct dc_env *env, struct dc_error *err)
 {
     struct dc_setting_string *setting;
 
@@ -145,7 +142,7 @@ struct dc_setting_string *dc_setting_string_create(const struct dc_posix_env *en
     return setting;
 }
 
-void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting_string **psetting)
+void dc_setting_string_destroy(const struct dc_env *env, struct dc_setting_string **psetting)
 {
     struct dc_setting_string *setting;
 
@@ -154,17 +151,14 @@ void dc_setting_string_destroy(const struct dc_posix_env *env, struct dc_setting
 
     if(setting->string)
     {
-        size_t len;
-
-        len = dc_strlen(env, setting->string);
-        dc_free(env, setting->string, len);
+        dc_free(env, setting->string);
     }
 
-    dc_free(env, *psetting, sizeof(struct dc_setting_string));
+    dc_free(env, *psetting);
     *psetting = NULL;
 }
 
-bool dc_setting_string_set(const struct dc_posix_env *env,
+bool dc_setting_string_set(const struct dc_env *env,
                            struct dc_error *err,
                            struct dc_setting_string *setting,
                            const char *value,
@@ -193,7 +187,7 @@ bool dc_setting_string_set(const struct dc_posix_env *env,
     return ret_val;
 }
 
-const char *dc_setting_string_get(const struct dc_posix_env *env, struct dc_setting_string *setting)
+const char *dc_setting_string_get(const struct dc_env *env, struct dc_setting_string *setting)
 {
     DC_TRACE(env);
 
@@ -201,7 +195,7 @@ const char *dc_setting_string_get(const struct dc_posix_env *env, struct dc_sett
 }
 
 struct dc_setting_regex *
-dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err, const char *pattern)
+dc_setting_regex_create(const struct dc_env *env, struct dc_error *err, const char *pattern)
 {
     struct dc_setting_regex *setting;
 
@@ -223,7 +217,7 @@ dc_setting_regex_create(const struct dc_posix_env *env, struct dc_error *err, co
     return setting;
 }
 
-void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_regex **psetting)
+void dc_setting_regex_destroy(const struct dc_env *env, struct dc_setting_regex **psetting)
 {
     struct dc_setting_regex *setting;
 
@@ -232,18 +226,15 @@ void dc_setting_regex_destroy(const struct dc_posix_env *env, struct dc_setting_
 
     if(setting->string)
     {
-        size_t len;
-
-        len = dc_strlen(env, setting->string);
-        dc_free(env, setting->string, len);
+        dc_free(env, setting->string);
     }
 
     dc_regfree(env, &setting->regex);
-    dc_free(env, setting, sizeof(struct dc_setting_regex));
+    dc_free(env, setting);
     *psetting = NULL;
 }
 
-bool dc_setting_regex_set(const struct dc_posix_env *env,
+bool dc_setting_regex_set(const struct dc_env *env,
                           struct dc_error *err,
                           struct dc_setting_regex *setting,
                           const char *value,
@@ -283,14 +274,14 @@ bool dc_setting_regex_set(const struct dc_posix_env *env,
     return ret_val;
 }
 
-const char *dc_setting_regex_get(const struct dc_posix_env *env, struct dc_setting_regex *setting)
+const char *dc_setting_regex_get(const struct dc_env *env, struct dc_setting_regex *setting)
 {
     DC_TRACE(env);
 
     return setting->string;
 }
 
-struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env, struct dc_error *err)
+struct dc_setting_bool *dc_setting_bool_create(const struct dc_env *env, struct dc_error *err)
 {
     struct dc_setting_bool *setting;
 
@@ -306,14 +297,14 @@ struct dc_setting_bool *dc_setting_bool_create(const struct dc_posix_env *env, s
     return setting;
 }
 
-void dc_setting_bool_destroy(const struct dc_posix_env *env, struct dc_setting_bool **psetting)
+void dc_setting_bool_destroy(const struct dc_env *env, struct dc_setting_bool **psetting)
 {
     DC_TRACE(env);
-    dc_free(env, *psetting, sizeof(struct dc_setting_bool));
+    dc_free(env, *psetting);
     *psetting = NULL;
 }
 
-bool dc_setting_bool_set(const struct dc_posix_env *env,
+bool dc_setting_bool_set(const struct dc_env *env,
                          struct dc_setting_bool *setting,
                          bool value,
                          dc_setting_type type)
@@ -336,14 +327,14 @@ bool dc_setting_bool_set(const struct dc_posix_env *env,
     return ret_val;
 }
 
-bool dc_setting_bool_get(const struct dc_posix_env *env, struct dc_setting_bool *setting)
+bool dc_setting_bool_get(const struct dc_env *env, struct dc_setting_bool *setting)
 {
     DC_TRACE(env);
 
     return setting->value;
 }
 
-struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *env, struct dc_error *err)
+struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_env *env, struct dc_error *err)
 {
     struct dc_setting_uint16 *setting;
 
@@ -359,14 +350,14 @@ struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_posix_env *en
     return setting;
 }
 
-void dc_setting_uint16_destroy(const struct dc_posix_env *env, struct dc_setting_uint16 **psetting)
+void dc_setting_uint16_destroy(const struct dc_env *env, struct dc_setting_uint16 **psetting)
 {
     DC_TRACE(env);
-    dc_free(env, *psetting, sizeof(struct dc_setting_uint16));
+    dc_free(env, *psetting);
     *psetting = NULL;
 }
 
-bool dc_setting_uint16_set(const struct dc_posix_env *env,
+bool dc_setting_uint16_set(const struct dc_env *env,
                            struct dc_setting_uint16 *setting,
                            uint16_t value,
                            dc_setting_type type)
@@ -389,7 +380,7 @@ bool dc_setting_uint16_set(const struct dc_posix_env *env,
     return ret_val;
 }
 
-uint16_t dc_setting_uint16_get(const struct dc_posix_env *env, struct dc_setting_uint16 *setting)
+uint16_t dc_setting_uint16_get(const struct dc_env *env, struct dc_setting_uint16 *setting)
 {
     DC_TRACE(env);
 
