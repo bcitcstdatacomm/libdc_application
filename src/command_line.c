@@ -110,7 +110,7 @@ static void parse_arguments(const struct dc_env *env,
         const void *value;
         struct options *opt;
 
-        c = dc_getopt_long(env, err, argc, (char **)argv, opt_settings->flags, long_options, NULL);
+        c = dc_getopt_long(env, argc, (char **)argv, opt_settings->flags, long_options, NULL);
 
         if(c == -1)
         {
