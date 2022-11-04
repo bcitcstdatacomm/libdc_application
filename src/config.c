@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
+
 #include "config.h"
 #include "options.h"
+#include "settings.h"
 #include <dc_c/dc_stdlib.h>
+
 
 int dc_default_load_config(const struct dc_env *env,
                            struct dc_error *err,

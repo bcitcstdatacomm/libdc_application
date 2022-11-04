@@ -14,48 +14,36 @@
  * limitations under the License.
  */
 
+
 #include "application.h"
 #include "command_line.h"
 #include "config.h"
 #include "defaults.h"
 #include "environment.h"
+#include "settings.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_c/dc_string.h>
 #include <dc_fsm/fsm.h>
+
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 extern char **environ;
 
 static int create_settings(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int parse_command_line(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int read_env_vars(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int read_config(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int set_defaults(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int run(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int cleanup(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int destroy_settings(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int create_settings_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int parse_command_line_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int read_env_vars_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int read_config_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int set_defaults_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int run_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int cleanup_error(const struct dc_env *env, struct dc_error *err, void *arg);
-
 static int destroy_settings_error(const struct dc_env *env, struct dc_error *err, void *arg);
 
 struct dc_application_lifecycle

@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+
 #include "options.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_util/types.h>
+
 
 void dc_options_set_string(const struct dc_env *env,
                            struct dc_error *err,

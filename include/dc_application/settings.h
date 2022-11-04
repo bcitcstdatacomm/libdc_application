@@ -1,8 +1,9 @@
 #ifndef LIBDC_APPLICATION_SETTINGS_H
 #define LIBDC_APPLICATION_SETTINGS_H
 
+
 /*
- * Copyright 2021-2021 D'Arcy Smith.
+ * Copyright 2021-2022 D'Arcy Smith.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +18,15 @@
  * limitations under the License.
  */
 
+
 #include <dc_env/env.h>
-#include <stdbool.h>
 #include <stdint.h>
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 // TODO: move these to the .c file and change the arguments to the functins
 // on create set it to NONE and after that chnage it to SET and get rid of all
@@ -270,5 +277,11 @@ bool dc_setting_uint16_set(const struct dc_env *env,
  */
 uint16_t dc_setting_uint16_get(const struct dc_env *env,
                                struct dc_setting_uint16 *setting);
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif // LIBDC_APPLICATION_SETTINGS_H

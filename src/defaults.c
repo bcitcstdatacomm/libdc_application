@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+
 #include "defaults.h"
 #include "options.h"
+
 
 int dc_default_set_defaults(const struct dc_env *env,
                             struct dc_error *err,

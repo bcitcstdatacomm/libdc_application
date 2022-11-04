@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+
 #include "settings.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_c/dc_string.h>
 #include <dc_posix/dc_regex.h>
 #include <dc_util/path.h>
+
 
 struct dc_setting_string
 {

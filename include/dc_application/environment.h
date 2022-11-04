@@ -1,8 +1,9 @@
 #ifndef LIBDC_APPLICATION_ENVIRONMENT_H
 #define LIBDC_APPLICATION_ENVIRONMENT_H
 
+
 /*
- * Copyright 2021-2021 D'Arcy Smith.
+ * Copyright 2021-2022 D'Arcy Smith.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,15 @@
  * limitations under the License.
  */
 
+
 #include "application.h"
 #include <dc_env/env.h>
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /**
  *
@@ -32,5 +40,11 @@ int dc_default_read_env_vars(const struct dc_env *env,
                              struct dc_error *err,
                              struct dc_application_settings *settings,
                              char **envvars);
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif // LIBDC_APPLICATION_ENVIRONMENT_H
