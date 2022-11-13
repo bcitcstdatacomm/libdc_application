@@ -67,34 +67,25 @@ struct dc_opt_settings
     char **argv;
 };
 
-void dc_options_set_string(const struct dc_env *env, struct dc_error *err,
-                           struct dc_setting *setting, const void *value,
-                           dc_setting_type type);
+void dc_options_set_string(const struct dc_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 
-void dc_options_set_regex(const struct dc_env *env, struct dc_error *err,
-                          struct dc_setting *setting, const void *value,
-                          dc_setting_type type);
+void dc_options_set_regex(const struct dc_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 
-void dc_options_set_path(const struct dc_env *env, struct dc_error *err,
-                         struct dc_setting *setting, const void *value,
-                         dc_setting_type type);
+void dc_options_set_path(const struct dc_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 
-void dc_options_set_bool(const struct dc_env *env, struct dc_error *err,
-                         struct dc_setting *setting, const void *value,
-                         dc_setting_type type);
+void dc_options_set_bool(const struct dc_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 
-void dc_options_set_uint16(const struct dc_env *env, struct dc_error *err,
-                           struct dc_setting *setting, const void *value,
-                           dc_setting_type type);
+void dc_options_set_uint16(const struct dc_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 
-const void *dc_string_from_string(const struct dc_env *env,
-                                  struct dc_error *err, const char *str);
+void dc_options_set_in_port_t(const struct dc_env *env, struct dc_error *err, struct dc_setting *setting, const void *value, dc_setting_type type);
 
-const void *dc_flag_from_string(const struct dc_env *env,
-                                struct dc_error *err, const char *str);
+const void *dc_string_from_string(const struct dc_env *env, struct dc_error *err, const char *str);
 
-const void *dc_uint16_from_string(const struct dc_env *env,
-                                  struct dc_error *err, const char *str);
+const void *dc_flag_from_string(const struct dc_env *env, struct dc_error *err, const char *str);
+
+const void *dc_uint16_from_string(const struct dc_env *env, struct dc_error *err, const char *str);
+
+const void *dc_in_port_t_from_string(const struct dc_env *env, struct dc_error *err, const char *str);
 
 
 #ifdef __cplusplus

@@ -15,7 +15,7 @@
  */
 
 
-#include "options.h"
+#include "dc_application/options.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_util/types.h>
 
@@ -82,6 +82,21 @@ void dc_options_set_uint16(const struct dc_env *env,
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+void dc_options_set_in_port_t(const struct dc_env *env,
+                              struct dc_error *err,
+                              struct dc_setting *setting,
+                              const void *value,
+                              dc_setting_type type)
+{
+    const in_port_t *pin_port_t;
+
+    pin_port_t = value;
+    dc_setting_in_port_t_set(env, (struct dc_setting_in_port_t *)setting, *pin_port_t, type);
+}
+#pragma GCC diagnostic pop
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 const void *
 dc_string_from_string(const struct dc_env *env, struct dc_error *err, const char *str)
 {
@@ -115,6 +130,27 @@ const void *dc_uint16_from_string(const struct dc_env *env, struct dc_error *err
     if(dc_error_has_no_error(err))
     {
         *value = dc_uint16_from_str(env, err, str, 10);
+
+        if(dc_error_has_error(err))
+        {
+            dc_free(env, value);
+            value = NULL;
+        }
+    }
+
+    return value;
+}
+
+const void *dc_in_port_t_from_string(const struct dc_env *env, struct dc_error *err, const char *str)
+{
+    in_port_t *value;
+
+    DC_TRACE(env);
+    value = dc_malloc(env, err, sizeof(in_port_t));
+
+    if(dc_error_has_no_error(err))
+    {
+        *value = dc_in_port_t_from_str(env, err, str, 10);
 
         if(dc_error_has_error(err))
         {

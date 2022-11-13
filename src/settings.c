@@ -15,7 +15,7 @@
  */
 
 
-#include "settings.h"
+#include "dc_application/settings.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_c/dc_string.h>
 #include <dc_posix/dc_regex.h>
@@ -52,6 +52,12 @@ struct dc_setting_uint16
 {
     struct dc_setting parent;
     uint16_t value;
+};
+
+struct dc_setting_in_port_t
+{
+    struct dc_setting parent;
+    in_port_t value;
 };
 
 bool dc_setting_is_set(const struct dc_env *env, struct dc_setting *setting)
@@ -388,3 +394,55 @@ uint16_t dc_setting_uint16_get(const struct dc_env *env, struct dc_setting_uint1
 
     return setting->value;
 }
+
+
+struct dc_setting_in_port_t *dc_setting_in_port_t_create(const struct dc_env *env, struct dc_error *err)
+{
+    struct dc_setting_in_port_t *setting;
+
+    DC_TRACE(env);
+    setting = dc_malloc(env, err, sizeof(struct dc_setting_uint16));
+
+    if(dc_error_has_no_error(err))
+    {
+        setting->parent.type = DC_SETTING_NONE;
+        setting->value = 0;
+    }
+
+    return setting;
+}
+
+void dc_setting_in_port_t_destroy(const struct dc_env *env,  struct dc_setting_in_port_t **psetting)
+{
+    DC_TRACE(env);
+    dc_free(env, *psetting);
+    *psetting = NULL;
+}
+
+bool dc_setting_in_port_t_set(const struct dc_env *env, struct dc_setting_in_port_t *setting, in_port_t value, dc_setting_type type)
+{
+    bool ret_val;
+
+    DC_TRACE(env);
+
+    if(setting->parent.type == DC_SETTING_NONE)
+    {
+        setting->parent.type = type;
+        setting->value = value;
+        ret_val = true;
+    }
+    else
+    {
+        ret_val = false;
+    }
+
+    return ret_val;
+}
+
+in_port_t dc_setting_in_port_t_get(const struct dc_env *env, struct dc_setting_in_port_t *setting)
+{
+    DC_TRACE(env);
+
+    return setting->value;
+}
+

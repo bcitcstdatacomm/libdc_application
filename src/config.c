@@ -15,9 +15,9 @@
  */
 
 
-#include "config.h"
-#include "options.h"
-#include "settings.h"
+#include "dc_application/config.h"
+#include "dc_application/options.h"
+#include "dc_application/settings.h"
 #include <dc_c/dc_stdlib.h>
 
 
@@ -143,6 +143,29 @@ const void *dc_uint16_from_config(const struct dc_env *env, struct dc_error *err
     if(dc_error_has_no_error(err))
     {
         *value = (uint16_t)config_value;
+    }
+
+    return value;
+}
+
+const void *dc_in_port_t_from_config(const struct dc_env *env, struct dc_error *err, config_setting_t *item)
+{
+    long long config_value;
+    in_port_t *value;
+
+    DC_TRACE(env);
+    config_value = item->value.llval;
+
+    if(config_value < 0 || config_value > UINT16_MAX)
+    {
+        return NULL;
+    }
+
+    value = dc_malloc(env, err, sizeof(in_port_t));
+
+    if(dc_error_has_no_error(err))
+    {
+        *value = (in_port_t)config_value;
     }
 
     return value;

@@ -15,8 +15,8 @@
  */
 
 
-#include "defaults.h"
-#include "options.h"
+#include "dc_application/defaults.h"
+#include "dc_application/options.h"
 
 
 int dc_default_set_defaults(const struct dc_env *env,

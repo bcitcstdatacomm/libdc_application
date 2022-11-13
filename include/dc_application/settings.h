@@ -19,6 +19,7 @@
  */
 
 
+#include <arpa/inet.h>
 #include <dc_env/env.h>
 #include <stdint.h>
 
@@ -50,6 +51,7 @@ struct dc_setting_regex;
 struct dc_setting_path;
 struct dc_setting_bool;
 struct dc_setting_uint16;
+struct dc_setting_in_port_t;
 
 
 /**
@@ -243,8 +245,7 @@ bool dc_setting_bool_get(const struct dc_env *env,
  * @param err
  * @return
  */
-struct dc_setting_uint16 *
-dc_setting_uint16_create(const struct dc_env *env, struct dc_error *err);
+struct dc_setting_uint16 *dc_setting_uint16_create(const struct dc_env *env, struct dc_error *err);
 
 
 /**
@@ -252,8 +253,7 @@ dc_setting_uint16_create(const struct dc_env *env, struct dc_error *err);
  * @param env
  * @param psetting
  */
-void dc_setting_uint16_destroy(const struct dc_env *env,
-                               struct dc_setting_uint16 **psetting);
+void dc_setting_uint16_destroy(const struct dc_env *env,  struct dc_setting_uint16 **psetting);
 
 
 /**
@@ -264,9 +264,7 @@ void dc_setting_uint16_destroy(const struct dc_env *env,
  * @param type
  * @return
  */
-bool dc_setting_uint16_set(const struct dc_env *env,
-                           struct dc_setting_uint16 *setting, uint16_t value,
-                           dc_setting_type type);
+bool dc_setting_uint16_set(const struct dc_env *env, struct dc_setting_uint16 *setting, uint16_t value, dc_setting_type type);
 
 
 /**
@@ -275,8 +273,43 @@ bool dc_setting_uint16_set(const struct dc_env *env,
  * @param setting
  * @return
  */
-uint16_t dc_setting_uint16_get(const struct dc_env *env,
-                               struct dc_setting_uint16 *setting);
+uint16_t dc_setting_uint16_get(const struct dc_env *env, struct dc_setting_uint16 *setting);
+
+/**
+ *
+ * @param env
+ * @param err
+ * @return
+ */
+struct dc_setting_in_port_t *dc_setting_in_port_t_create(const struct dc_env *env, struct dc_error *err);
+
+
+/**
+ *
+ * @param env
+ * @param psetting
+ */
+void dc_setting_in_port_t_destroy(const struct dc_env *env,  struct dc_setting_in_port_t **psetting);
+
+
+/**
+ *
+ * @param env
+ * @param setting
+ * @param value
+ * @param type
+ * @return
+ */
+bool dc_setting_in_port_t_set(const struct dc_env *env, struct dc_setting_in_port_t *setting, in_port_t value, dc_setting_type type);
+
+
+/**
+ *
+ * @param env
+ * @param setting
+ * @return
+ */
+in_port_t dc_setting_in_port_t_get(const struct dc_env *env, struct dc_setting_in_port_t *setting);
 
 
 #ifdef __cplusplus

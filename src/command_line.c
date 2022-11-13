@@ -15,8 +15,8 @@
  */
 
 
-#include "command_line.h"
-#include "options.h"
+#include "dc_application/command_line.h"
+#include "dc_application/options.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_unix/dc_getopt.h>
 

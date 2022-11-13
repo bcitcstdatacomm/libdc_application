@@ -29,17 +29,15 @@ extern "C" {
 #endif
 
 
-int dc_default_load_config(const struct dc_env *env, struct dc_error *err,
-                           struct dc_application_settings *settings);
+int dc_default_load_config(const struct dc_env *env, struct dc_error *err, struct dc_application_settings *settings);
 
-const void *dc_string_from_config(const struct dc_env *env,
-                                  struct dc_error *err, config_setting_t *item);
+const void *dc_string_from_config(const struct dc_env *env, struct dc_error *err, config_setting_t *item);
 
-const void *dc_flag_from_config(const struct dc_env *env,
-                                struct dc_error *err, config_setting_t *item);
+const void *dc_flag_from_config(const struct dc_env *env, struct dc_error *err, config_setting_t *item);
 
-const void *dc_uint16_from_config(const struct dc_env *env,
-                                  struct dc_error *err, config_setting_t *item);
+const void *dc_uint16_from_config(const struct dc_env *env, struct dc_error *err, config_setting_t *item);
+
+const void *dc_in_port_t_from_config(const struct dc_env *env, struct dc_error *err, config_setting_t *item);
 
 
 #ifdef __cplusplus

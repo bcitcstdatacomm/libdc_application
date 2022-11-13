@@ -15,12 +15,12 @@
  */
 
 
-#include "application.h"
-#include "command_line.h"
-#include "config.h"
-#include "defaults.h"
-#include "environment.h"
-#include "settings.h"
+#include "dc_application/application.h"
+#include "dc_application/command_line.h"
+#include "dc_application/config.h"
+#include "dc_application/defaults.h"
+#include "dc_application/environment.h"
+#include "dc_application/settings.h"
 #include <dc_c/dc_stdlib.h>
 #include <dc_c/dc_string.h>
 #include <dc_fsm/fsm.h>
