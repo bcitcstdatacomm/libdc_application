@@ -30,6 +30,7 @@ find_library(LIBDC_UNIX dc_unix REQUIRED)
 find_library(LIBDC_UTIL dc_util REQUIRED)
 find_library(LIBDC_FSM dc_fsm REQUIRED)
 find_library(LIBDC_FSM dc_application REQUIRED)
+find_library(LIBBSD bsd REQUIRED)
 
 target_link_libraries(libdc_application_test PRIVATE ${LIBCGREEN})
 target_link_libraries(libdc_application_test PRIVATE ${LIBDC_CONFIG})
@@ -41,6 +42,10 @@ target_link_libraries(libdc_application_test PRIVATE ${LIBDC_UNIX})
 target_link_libraries(libdc_application_test PRIVATE ${LIBDC_UTIL})
 target_link_libraries(libdc_application_test PRIVATE ${LIBDC_FSM})
 target_link_libraries(libdc_application_test PRIVATE ${LIBDC_APPLICATION})
+
+if(LIBBSD)
+    target_link_libraries(libdc_application_test PUBLIC ${LIBBSD})
+endif()
 
 add_test(NAME libdc_application_test COMMAND libdc_application_test)
 
