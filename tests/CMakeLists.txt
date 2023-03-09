@@ -30,7 +30,7 @@ find_library(LIBDC_UNIX dc_unix REQUIRED)
 find_library(LIBDC_UTIL dc_util REQUIRED)
 find_library(LIBDC_FSM dc_fsm REQUIRED)
 find_library(LIBDC_FSM dc_application REQUIRED)
-find_library(LIBBSD bsd REQUIRED)
+find_library(LIBBSD bsd)
 
 target_link_libraries(libdc_application_test PRIVATE ${LIBCGREEN})
 target_link_libraries(libdc_application_test PRIVATE ${LIBDC_CONFIG})
